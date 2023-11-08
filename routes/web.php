@@ -1,6 +1,10 @@
 <?php
 
+use FFMpeg\Filters\Video\VideoFilters;
+use FFMpeg\Format\Audio\Aac;
 use Illuminate\Support\Facades\Route;
+use ProtoneMedia\LaravelFFMpeg\Filters\WatermarkFactory;
+use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
 
 /*
 |--------------------------------------------------------------------------

@@ -14,6 +14,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::controller('AuthManager')->prefix('auth')->group(function () {
+    Route::post('/login', 'login');
+    Route::post('login/send_otp', 'SendOTP');
+   
+    Route::post('resend_otp', 'SendOTP');
+   
+    Route::post('signup', 'signup');
+    Route::post('signup/send_otp', 'signup_otp');
+    Route::post('logout', 'logout')->middleware('auth:sanctum');
 });

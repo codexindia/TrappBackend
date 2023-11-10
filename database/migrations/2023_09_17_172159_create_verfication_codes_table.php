@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('verfication_codes', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->nullable();
-            $table->string('country_code');
-            $table->string('phone')->unique();
-            $table->string('email')->nullable()->unique();
-            $table->string('profile_pic')->nullable();
+            $table->bigInteger('phone');
+            $table->string('otp');
+            $table->timestamp('expire_at')->nullable();
+            $table->json('temp')->nullable();
             $table->timestamps();
         });
     }
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('verfication_codes');
     }
 };

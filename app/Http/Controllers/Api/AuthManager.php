@@ -109,6 +109,8 @@ class AuthManager extends Controller
         $request->validate([
             'country_code' => 'required|numeric',
             'phone' => 'required|numeric|exists:users,phone|digits:10',
+        ],[
+            'phone.exists' => 'Phone Number Has Not Registered',
         ]);
 
         if ($this->genarateotp($request->phone)) {

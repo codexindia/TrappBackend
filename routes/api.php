@@ -17,10 +17,17 @@ use Illuminate\Support\Facades\Route;
 Route::controller('AuthManager')->prefix('auth')->group(function () {
     Route::post('/login', 'login');
     Route::post('login/send_otp', 'SendOTP');
-   
+
     Route::post('resend_otp', 'SendOTP');
-   
+
     Route::post('signup', 'signup');
     Route::post('signup/send_otp', 'signup_otp');
     Route::post('logout', 'logout')->middleware('auth:sanctum');
+});
+Route::middleware('auth:sanctum')->group(function () {
+    Route::controller('UserManager')->prefix('user')->group(function () {
+        Route::post('/get_current_user', 'get_current_user');
+        Route::post('/update_user', 'update_user');
+       
+    });
 });

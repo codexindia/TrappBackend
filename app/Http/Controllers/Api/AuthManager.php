@@ -63,7 +63,7 @@ class AuthManager extends Controller
             'otp' => 'required|numeric|digits:6',
             'phone' => 'required|numeric'
         ]);
-      return  $this->VerifyOTP($request->phone, $request->otp);
+    //  return  $this->VerifyOTP($request->phone, $request->otp);
         if ($this->VerifyOTP($request->phone, $request->otp)) {
             $checkphone = User::where('phone', $request->phone)->first();
             if ($checkphone) {

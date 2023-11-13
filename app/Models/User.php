@@ -21,7 +21,8 @@ class User extends Authenticatable
         'name',
         'email',
         'phone',
-        'country_code'
+        'country_code',
+        'profile_pic'
     ];
 
 }

@@ -61,7 +61,7 @@ class AuthManager extends Controller
         $request->validate([
             'country_code' => 'required|numeric',
             'otp' => 'required|numeric|digits:6',
-            'phone' => 'required|numeric'
+            'phone' => 'required|numeric|exists:users,phone|digits:10',
         ]);
     //  return  $this->VerifyOTP($request->phone, $request->otp);
         if ($this->VerifyOTP($request->phone, $request->otp)) {

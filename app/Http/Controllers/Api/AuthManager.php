@@ -27,6 +27,7 @@ class AuthManager extends Controller
                 'phone' => $request->phone,
                 'country_code' => $request->country_code,
             ]);
+            
             $token = $new_user->createToken('auth_token')->plainTextToken;
             return response()->json([
                 'status' => true,
@@ -67,7 +68,7 @@ class AuthManager extends Controller
         if ($this->VerifyOTP($request->phone, $request->otp)) {
             $checkphone = User::where('phone', $request->phone)->first();
             if ($checkphone) {
-                //   $checkphone->tokens()->delete();
+                   $checkphone->tokens()->delete();
                 $token = $checkphone->createToken('auth_token')->plainTextToken;
 
                 return response()->json([

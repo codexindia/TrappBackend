@@ -3,7 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::controller('AuthManager')->prefix('auth')->group(function () {
+Route::controller('AuthManager')->middleware('throttle:api')->prefix('auth')->group(function () {
     Route::post('login', 'login_submit');
     Route::post('forget_pass', 'forget_pass');
 });

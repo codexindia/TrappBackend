@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\UserBand;
 use Illuminate\Http\Request;
 use App\Models\User;
 
@@ -12,10 +13,10 @@ class UserManagement extends Controller
     {
 
         if ($request->query_data == "all") {
-            $users = User::orderBy('id', 'desc')->paginate(10);
+            $users = User::orderBy('id', 'desc')->paginate(2);
         } else {
 
-            $users = User::where('phone', $request->query_data)->orderBy('id', 'desc')->paginate(10);
+            $users = User::where('phone', $request->query_data)->orderBy('id', 'desc')->paginate(2);
         }
         return response()->json([
             'status' => true,
@@ -26,12 +27,27 @@ class UserManagement extends Controller
     public function delete_user(Request $request)
     {
         $request->validate([
-            'id' => 'required|exists:users,id',
+            'user_id' => 'required|exists:users,id',
         ]);
         User::find($request->id)->delete();
         return response()->json([
             'status' => true,
             'message' => 'User Deleted SuccessFully',
+        ]);
+    }
+    public function ban_user(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'reasons' => 'required'
+        ]);
+        UserBand::create([
+          'user_id' => $request->user_id,
+          'reason' => $request->reasons,
+        ]);
+        return response()->json([
+            'status' => true,
+            'message' => 'User banned SuccessFully',
         ]);
     }
 }

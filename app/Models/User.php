@@ -25,6 +25,10 @@ class User extends Authenticatable
         'country_code',
         'profile_pic'
     ];
+    public function UserBlocked()
+    {
+        return $this->hasOne(UserBand::class, 'user_id', 'id');
+    }
     public function getProfilePicAttribute($value)
     {
         if(!$value == null)

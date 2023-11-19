@@ -24,7 +24,7 @@ Route::controller('AuthManager')->prefix('auth')->group(function () {
     Route::post('signup/send_otp', 'signup_otp');
     Route::post('logout', 'logout')->middleware('auth:sanctum');
 });
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum','user.check'])->group(function () {
     Route::controller('UserManager')->prefix('user')->group(function () {
         Route::post('/get_current_user', 'get_current_user');
         Route::post('/update_user', 'update_user');

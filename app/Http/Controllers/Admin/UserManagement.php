@@ -58,7 +58,7 @@ class UserManagement extends Controller
     {
         $request->validate([
             'user_id' => 'required|exists:user_bands,user_id',
-            'reasons' => 'required'
+          
         ]);
         UserBand::where('user_id' ,$request->user_id)->delete();
         return response()->json([

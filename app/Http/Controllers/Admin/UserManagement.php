@@ -33,7 +33,7 @@ class UserManagement extends Controller
         $request->validate([
             'user_id' => 'required|exists:users,id',
         ]);
-        User::find($request->id)->delete();
+        User::find($request->user_id)->delete();
         return response()->json([
             'status' => true,
             'message' => 'User Deleted SuccessFully',

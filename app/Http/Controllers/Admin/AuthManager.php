@@ -23,7 +23,7 @@ class AuthManager extends Controller
         // ]);
         if ($guard->attempt(['email' => $request->email, 'password' => $request->password])) {
             $admin = Admin::where('email', $request->email)->first();
-            $admin->tokens()->delete();
+           // $admin->tokens()->delete();
 
             $token = $admin->createToken('auth_token')->plainTextToken;
             return response()->json([

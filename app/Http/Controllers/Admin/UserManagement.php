@@ -14,13 +14,13 @@ class UserManagement extends Controller
 
         if ($request->query_data == "all") {
             $users = User::with('UserBlocked')
-            ->orderBy('id', 'desc')->paginate(2);
+            ->orderBy('id', 'desc')->paginate(10);
            
         } else {
 
             $users = User::where('phone', $request->query_data)
             ->orderBy('id', 'desc')
-            ->paginate(2);
+            ->paginate(10);
         }
         return response()->json([
             'status' => true,

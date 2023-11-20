@@ -19,6 +19,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('get_users/{query_data}', 'get_users');
         Route::post('delete_user', 'delete_user');
         Route::post('ban_user', 'ban_user');
+        Route::post('unban_user', 'unban_user');
     });
     Route::controller('CreatorManagement')->prefix('creator')->group(function () {
         Route::post('get_creator/{query_data}', 'get_creator');

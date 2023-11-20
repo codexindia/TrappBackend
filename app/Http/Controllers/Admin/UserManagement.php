@@ -42,7 +42,7 @@ class UserManagement extends Controller
     public function ban_user(Request $request)
     {
         $request->validate([
-            'user_id' => 'required|exists:users,id',
+            'user_id' => 'required|exists:users,id|unique:user_bands,user_id',
             'reasons' => 'required'
         ]);
         UserBand::create([
@@ -52,6 +52,18 @@ class UserManagement extends Controller
         return response()->json([
             'status' => true,
             'message' => 'User banned SuccessFully',
+        ]);
+    }
+    public function unban_user(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required|exists:user_bands,user_id',
+            'reasons' => 'required'
+        ]);
+        UserBand::where('user_id' ,$request->user_id)->delete();
+        return response()->json([
+            'status' => true,
+            'message' => 'User Unbanned SuccessFully',
         ]);
     }
 }

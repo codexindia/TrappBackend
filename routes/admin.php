@@ -23,6 +23,7 @@ Route::middleware('auth:sanctum')->group(function () {
     });
     Route::controller('CreatorManagement')->prefix('creator')->group(function () {
         Route::post('get_creator/{query_data}', 'get_creator');
+        Route::post('add_creator', 'add_creator');
     });
     Route::controller('BannerManager')->prefix('banner')->group(function () {
         Route::post('get_banner', 'get_banner_list');

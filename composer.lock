@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b5c0242e36dab95d1d5eed5ca2eb4d23",
+    "content-hash": "e95a5109beb4270131af2bba21e438d9",
     "packages": [
         {
             "name": "brick/math",
@@ -6469,6 +6469,54 @@
                 "source": "https://github.com/webmozarts/assert/tree/1.11.0"
             },
             "time": "2022-06-03T18:03:27+00:00"
+        },
+        {
+            "name": "wester/chunk-upload",
+            "version": "v2.6.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hossein-zare/wester-chunk-upload.git",
+                "reference": "dad33bf8331e1bbdf7a6166c949dfbc38c7e726c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hossein-zare/wester-chunk-upload/zipball/dad33bf8331e1bbdf7a6166c949dfbc38c7e726c",
+                "reference": "dad33bf8331e1bbdf7a6166c949dfbc38c7e726c",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Wester\\ChunkUpload\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Hossein Zare",
+                    "email": "zarehossein.hz1997@gmail.com"
+                }
+            ],
+            "description": "Handle chunked uploads with local and ftp drivers simply in PHP with advanced validation features and localization.",
+            "keywords": [
+                "chunk",
+                "chunked-upload",
+                "php",
+                "resumable",
+                "upload",
+                "validation"
+            ],
+            "support": {
+                "issues": "https://github.com/hossein-zare/wester-chunk-upload/issues",
+                "source": "https://github.com/hossein-zare/wester-chunk-upload/tree/v2.6.2"
+            },
+            "time": "2023-02-28T15:55:51+00:00"
         }
     ],
     "packages-dev": [

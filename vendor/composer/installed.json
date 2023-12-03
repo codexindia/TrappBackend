@@ -9267,6 +9267,57 @@
                 "source": "https://github.com/webmozarts/assert/tree/1.11.0"
             },
             "install-path": "../webmozart/assert"
+        },
+        {
+            "name": "wester/chunk-upload",
+            "version": "v2.6.2",
+            "version_normalized": "2.6.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hossein-zare/wester-chunk-upload.git",
+                "reference": "dad33bf8331e1bbdf7a6166c949dfbc38c7e726c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hossein-zare/wester-chunk-upload/zipball/dad33bf8331e1bbdf7a6166c949dfbc38c7e726c",
+                "reference": "dad33bf8331e1bbdf7a6166c949dfbc38c7e726c",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.0"
+            },
+            "time": "2023-02-28T15:55:51+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "Wester\\ChunkUpload\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Hossein Zare",
+                    "email": "zarehossein.hz1997@gmail.com"
+                }
+            ],
+            "description": "Handle chunked uploads with local and ftp drivers simply in PHP with advanced validation features and localization.",
+            "keywords": [
+                "chunk",
+                "chunked-upload",
+                "php",
+                "resumable",
+                "upload",
+                "validation"
+            ],
+            "support": {
+                "issues": "https://github.com/hossein-zare/wester-chunk-upload/issues",
+                "source": "https://github.com/hossein-zare/wester-chunk-upload/tree/v2.6.2"
+            },
+            "install-path": "../wester/chunk-upload"
         }
     ],
     "dev": true,

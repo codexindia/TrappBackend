@@ -28,4 +28,13 @@ class Creator extends Authenticatable
         );
         return $arr[rand(0,1)];
     }
+    public function getChannelBannerAttribute($value)
+    {
+        if(!$value == null)
+        {
+            return asset(Storage::url($value));
+        }
+        return null;
+    }
 }
+ 

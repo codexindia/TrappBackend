@@ -21,10 +21,10 @@ class Creator extends Authenticatable
         $arr = array(
             '0' => 'https://ui-avatars.com/api/?background=0D8ABC&name='
             .$this->attributes['first_name'].'+'
-            .$this->attributes['last_name'].'&color=white',
+            .$this->attributes['last_name'].'&color=ffffff',
             '1' => 'https://ui-avatars.com/api/?background=4BE87A&name='
             .$this->attributes['first_name'].'+'
-            .$this->attributes['last_name'].'&color=white'
+            .$this->attributes['last_name'].'&color=ffffff'
         );
         return $arr[rand(0,1)];
     }

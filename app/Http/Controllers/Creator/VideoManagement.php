@@ -13,7 +13,7 @@ class VideoManagement extends Controller
 {
     public function video_list(Request $request)
     {
-        $row = UploadedVideos::orderBy('id', 'desc')->where("creator_id", $request->id)->paginate(10);
+        $row = UploadedVideos::orderBy('id', 'desc')->where("creator_id", $request->user()->id)->paginate(10);
         if ($row) {
             return response()->json([
                 'status' => true,

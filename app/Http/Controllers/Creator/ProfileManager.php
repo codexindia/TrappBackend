@@ -22,18 +22,25 @@ class ProfileManager extends Controller
     {
         $request->validate([
             'email' => 'required|email',
-            'name' => 'required',
-            'profile_pic' => 'image|mimes:jpg,png,jpeg,gif,svg|max:2048'
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'channel_logo' => 'image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+            'channel_banner' => 'image|mimes:jpg,png,jpeg,gif,svg|max:2048'
         ]);
         $update_values = array();
         $update_values['email'] = $request->email;
-        $update_values['name'] = $request->name;
+        $update_values['first_name'] = $request->first_name;
+        $update_values['last_name'] = $request->last_name;
         if ($request->has('password')) {
             $update_values['password'] = bcrypt($request->password);
         }
-        if ($request->hasFile('profile_pic')) {
-            $image_path = Storage::put('public/creators/profiles', $request->file('profile_pic'));
-            $update_values['profile_pic'] = $image_path;
+        if ($request->hasFile('channel_logo')) {
+            $image_path = Storage::put('public/creators/profiles', $request->file('channel_logo'));
+            $update_values['channel_logo'] = $image_path;
+        }
+        if ($request->hasFile('channel_banner')) {
+            $image_path = Storage::put('public/creators/profiles', $request->file('channel_banner'));
+            $update_values['channel_banner'] = $image_path;
         }
         $creator = Creator::find($request->user()->id);
        

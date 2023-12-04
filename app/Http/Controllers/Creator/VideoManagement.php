@@ -11,7 +11,7 @@ class VideoManagement extends Controller
    public function upload(Request $request){
     try {
         $chunk = new Chunk([
-            'name' => 'videodfgdf', // same as    $_FILES['video']
+            'name' => 'video', // same as    $_FILES['video']
             'chunk_size' => 900000, // must be equal to the value specified on the client side
 
             // Driver

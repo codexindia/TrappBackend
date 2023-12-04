@@ -13,6 +13,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('get_counts', 'get_counts');
     });
     Route::controller('VideoManagement')->prefix('video')->group(function () {
-        Route::post('upload', 'upload')->withoutMiddleware('auth:sanctum');
+        Route::post('upload', 'upload');
     });
 });

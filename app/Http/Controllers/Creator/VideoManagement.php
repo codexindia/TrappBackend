@@ -11,6 +11,17 @@ use App\Models\UploadedVideos;
 
 class VideoManagement extends Controller
 {
+    public function video_list(Request $request)
+    {
+        $row = UploadedVideos::orderBy('id', 'desc')->where("id", $request->id)->paginate(10);
+        if ($row) {
+            return response()->json([
+                'status' => true,
+                'data' => $row,
+                'message' => 'reterive done'
+            ]);
+        }
+    }
     public function upload(Request $request)
     {
         try {

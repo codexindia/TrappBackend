@@ -14,5 +14,6 @@ Route::middleware('auth:sanctum')->group(function () {
     });
     Route::controller('VideoManagement')->prefix('video')->group(function () {
         Route::post('upload', 'upload');
+        Route::post('video_list', 'video_list');
     });
 });

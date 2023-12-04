@@ -41,7 +41,8 @@ class VideoManagement extends Controller
 
             return response()->json([
                 'status' => true,
-                'message' => 'Video Upload SuccessFully',
+                'message' => 'Video Upload Success',
+                'url' => url($proof_src),
             ]);
         } else {
             $chunk->response()->json([

@@ -11,12 +11,12 @@ class DashboardManager extends Controller
     public function get_counts(Request $request)
     {
         $videos = UploadedVideos::where([
-            'creator_id'=> $request->user()->id,
-            'video_type'=>'normal'
+            'creator_id' => $request->user()->id,
+            'video_type' => 'normal'
         ])->count();
-        $lives =UploadedVideos::where([
-            'creator_id'=> $request->user()->id,
-            'video_type'=>'live'
+        $lives = UploadedVideos::where([
+            'creator_id' => $request->user()->id,
+            'video_type' => 'live'
         ])->count();
         $counts = array();
         $counts["revenue"] = 0;

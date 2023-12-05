@@ -36,5 +36,9 @@ class Creator extends Authenticatable
         }
         return null;
     }
+    public function Videos()
+    {
+        return $this->hasMany(UploadedVideos::class, 'creator_id', 'id');
+    }
 }
  

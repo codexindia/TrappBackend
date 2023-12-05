@@ -10,8 +10,8 @@ class DashboardManager extends Controller
     public function get_counts(Request $request)
     {
         $counts = array();
-        $counts["users"] = 50;
-        $counts["creators"] = 50;
+        $counts["revenue"] = 50;
+        $counts["followers"] = 50;
         $counts["videos"] = 0;
         $counts["live"] = 50;
         //$counts = json_encode($counts);

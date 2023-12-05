@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Creator;
+use App\Models\UploadedVideos;
 use Illuminate\Http\Request;
 
 class CreatorManagement extends Controller
@@ -47,5 +48,28 @@ class CreatorManagement extends Controller
                 'message' => 'New Creator Added SuccessFully'
             ]);
         }
+    }
+    public function delete_creator(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|exits:creators,id'
+        ]);
+        Creator::where('id', $request->id)->delete();
+        UploadedVideos::where('creator_id', $request->id)->delete();
+        return response()->json([
+            'status' => true,
+            'message' => 'deleted executed',
+        ]);
+    }
+    public function ban_creator(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|exits:creators,id'
+        ]);
+      //  UploadedVideos::where('creator_id', $request->id)->delete();
+        return response()->json([
+            'status' => true,
+            'message' => 'Banned SuccessFully',
+        ]);
     }
 }

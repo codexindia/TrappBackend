@@ -21,7 +21,7 @@ class DashboardManager extends Controller
         $counts = array();
         $counts["revenue"] = 0;
         $counts["followers"] = 50;
-        $counts["video"] = $videos;
+        $counts["videos"] = $videos;
         $counts["live"] = $lives;
         //$counts = json_encode($counts);
         return response()->json([

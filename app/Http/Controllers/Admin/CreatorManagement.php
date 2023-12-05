@@ -52,7 +52,7 @@ class CreatorManagement extends Controller
     public function delete_creator(Request $request)
     {
         $request->validate([
-            'id' => 'required|exits:creators,id'
+            'id' => 'required|exists:creators,id'
         ]);
         Creator::where('id', $request->id)->delete();
         UploadedVideos::where('creator_id', $request->id)->delete();
@@ -64,7 +64,7 @@ class CreatorManagement extends Controller
     public function ban_creator(Request $request)
     {
         $request->validate([
-            'id' => 'required|exits:creators,id'
+            'id' => 'required|exists:creators,id'
         ]);
       //  UploadedVideos::where('creator_id', $request->id)->delete();
         return response()->json([

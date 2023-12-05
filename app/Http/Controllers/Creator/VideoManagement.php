@@ -11,6 +11,20 @@ use App\Models\UploadedVideos;
 
 class VideoManagement extends Controller
 {
+    public function delete(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|exists:uploaded_videos,id'
+        ]);
+        UploadedVideos::where([
+            'creator_id' => $request->user()->id,
+            'id' => $request->id,
+        ])->delete();
+        return response()->json([
+            'status' => true,
+            'message' => 'video deleted successfully'
+        ]);
+    }
     public function video_list(Request $request)
     {
         $row = UploadedVideos::orderBy('id', 'desc')->where("creator_id", $request->user()->id)->paginate(10);

@@ -12,7 +12,7 @@ class VideoManagement extends Controller
     {
         $data = UploadedVideos::with('Creator:id,channel_name')
         ->orderBy("id", "desc")
-        ->paginate(10)->makeHidden(['video_loc']);
+        ->paginate(10);
         return response()->json([
             'status' => true,
             'data' => $data,

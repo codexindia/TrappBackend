@@ -25,6 +25,31 @@ class VideoManagement extends Controller
             'message' => 'video deleted successfully'
         ]);
     }
+    public function edit(Request $request)
+    {
+        $update_values = array();
+        if ($request->has('title')) {
+            $update_values['title'] = $request->title;
+        }
+        if ($request->has('description')) {
+            $update_values['description'] = $request->description;
+        }
+        if ($request->has('thumbnail')) {
+            $thumbnail = Storage::put('public/videos/thumbnail', $request->file('thumbnail'));
+            $update_values['thumbnail'] =  $thumbnail;
+        }
+        if ($request->has('privacy')) {
+            $update_values['privacy'] = $request->privacy;
+        }
+        UploadedVideos::where([
+            'creator_id' => $request->user()->id,
+            'id' => $request->id,
+        ])->update([$update_values]);
+        return response()->json([
+            'status' => true,
+            'message' => 'Video Updated SuccessFully'
+        ]);
+    }
     public function video_list(Request $request)
     {
         $row = UploadedVideos::orderBy('id', 'desc')->where("creator_id", $request->user()->id)->paginate(10);

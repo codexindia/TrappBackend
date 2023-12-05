@@ -19,4 +19,16 @@ class VideoManagement extends Controller
             'message' => 'Retrive Done'
         ]);
     }
+    public function delete(Request $request){
+        $request->validate([
+            'id' => 'required|exists:uploaded_videos,id'
+        ]);
+        UploadedVideos::where([
+            'id' => $request->id,
+        ])->delete();
+        return response()->json([
+            'status' => true,
+            'message' => 'video deleted successfully'
+        ]);
+    }
 }

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('uploaded_videos', function (Blueprint $table) {
             $table->id();
             $table->string('creator_id');
-            $table->string('title');
+            $table->text('title');
             $table->text('description')->nullable();
             $table->enum('privacy',['public','private']);
             $table->string('thumbnail');

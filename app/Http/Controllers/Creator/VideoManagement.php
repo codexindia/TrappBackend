@@ -24,6 +24,10 @@ class VideoManagement extends Controller
     }
     public function upload(Request $request)
     {
+        $request->validate([
+            'title' => 'max:100',
+            'description' => 'max:5000'
+        ]);
         try {
             $chunk = new Chunk([
                 'name' => 'video', // same as    $_FILES['video']

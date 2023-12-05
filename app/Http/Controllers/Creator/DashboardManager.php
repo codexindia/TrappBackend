@@ -12,7 +12,7 @@ class DashboardManager extends Controller
     {
         $videos = UploadedVideos::where([
             'creator_id'=> $request->user()->id,
-            'video_type'=>'simple'
+            'video_type'=>'normal'
         ])->count();
         $lives =UploadedVideos::where([
             'creator_id'=> $request->user()->id,

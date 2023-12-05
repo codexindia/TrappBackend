@@ -32,4 +32,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('create_banner', 'create_banner');
         Route::post('delete', 'delete_banner');
     });
+    Route::controller('VideoManagement')->prefix('video')->group(function () {
+        Route::post('video_list', 'video_list');
+      
+    });
 });

@@ -18,4 +18,8 @@ class UploadedVideos extends Model
         }
         return null;
     }
+    public function Creator()
+    {
+        return $this->hasOne(Creator::class, 'id', 'creator_id');
+    }
 }

@@ -44,7 +44,7 @@ class VideoManagement extends Controller
         UploadedVideos::where([
             'creator_id' => $request->user()->id,
             'id' => $request->id,
-        ])->update([$update_values]);
+        ])->update($update_values);
         return response()->json([
             'status' => true,
             'message' => 'Video Updated SuccessFully'

@@ -28,6 +28,9 @@ Route::middleware(['auth:sanctum','user.check'])->group(function () {
     Route::controller('UserManager')->prefix('user')->group(function () {
         Route::post('/get_current_user', 'get_current_user');
         Route::post('/update_user', 'update_user');
+    });
+    Route::controller('BannerGet')->prefix('banner')->group(function () {
+        Route::post('/get_all', 'get_all');
        
     });
 });

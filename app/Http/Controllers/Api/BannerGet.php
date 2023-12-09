@@ -12,7 +12,7 @@ class BannerGet extends Controller
         return response()->json([
             'status' => true,
             'data' => $banner,
-            'message' => 'retreive done'
+            'message' => 'retrieve done'
         ]);
     }
 }

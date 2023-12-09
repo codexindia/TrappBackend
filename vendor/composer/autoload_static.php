@@ -37,6 +37,7 @@ class ComposerStaticInit9652c6b39b06ee31ca41b94dccf4cf12
         'a1cfe24d14977df6878b9bf804af2d1c' => __DIR__ . '/..' . '/nunomaduro/collision/src/Adapters/Phpunit/Autoload.php',
         'ec07570ca5a812141189b1fa81503674' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Assert/Functions.php',
         '320163ac6b93aebe3dc25b60a0533d56' => __DIR__ . '/..' . '/spatie/laravel-ignition/src/helpers.php',
+        'b4e3f29b106af37a2bb239f73cdf68c7' => __DIR__ . '/../..' . '/app/helpers.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -620,8 +621,12 @@ class ComposerStaticInit9652c6b39b06ee31ca41b94dccf4cf12
         'App\\Http\\Controllers\\Admin\\DashboardManager' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/DashboardManager.php',
         'App\\Http\\Controllers\\Admin\\ProfileManager' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/ProfileManager.php',
         'App\\Http\\Controllers\\Admin\\UserManagement' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/UserManagement.php',
+        'App\\Http\\Controllers\\Admin\\VideoManagement' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/VideoManagement.php',
         'App\\Http\\Controllers\\Api\\AuthManager' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/AuthManager.php',
+        'App\\Http\\Controllers\\Api\\BannerGet' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/BannerGet.php',
+        'App\\Http\\Controllers\\Api\\HomeManager' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/HomeManager.php',
         'App\\Http\\Controllers\\Api\\UserManager' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/UserManager.php',
+        'App\\Http\\Controllers\\Api\\VideosManager' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/VideosManager.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
         'App\\Http\\Controllers\\Creator\\AuthManager' => __DIR__ . '/../..' . '/app/Http/Controllers/Creator/AuthManager.php',
         'App\\Http\\Controllers\\Creator\\DashboardManager' => __DIR__ . '/../..' . '/app/Http/Controllers/Creator/DashboardManager.php',
@@ -642,6 +647,8 @@ class ComposerStaticInit9652c6b39b06ee31ca41b94dccf4cf12
         'App\\Models\\Admin' => __DIR__ . '/../..' . '/app/Models/Admin.php',
         'App\\Models\\Banner' => __DIR__ . '/../..' . '/app/Models/Banner.php',
         'App\\Models\\Creator' => __DIR__ . '/../..' . '/app/Models/Creator.php',
+        'App\\Models\\Followers' => __DIR__ . '/../..' . '/app/Models/Followers.php',
+        'App\\Models\\UploadedVideos' => __DIR__ . '/../..' . '/app/Models/UploadedVideos.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',
         'App\\Models\\UserBand' => __DIR__ . '/../..' . '/app/Models/UserBand.php',
         'App\\Models\\VerficationCodes' => __DIR__ . '/../..' . '/app/Models/VerficationCodes.php',

@@ -31,6 +31,19 @@ Route::middleware(['auth:sanctum','user.check'])->group(function () {
     });
     Route::controller('BannerGet')->prefix('banner')->group(function () {
         Route::post('/get_all', 'get_all');
-       
+    });
+    Route::controller('HomeManager')->prefix('home')->group(function () {
+        Route::post('/get_layout', 'get_layout');
+    });
+    Route::controller('HomeManager')->prefix('home')->group(function () {
+        Route::post('/get_layout', 'get_layout');
+    });
+    Route::controller('CreatorProfile')->prefix('creator')->group(function () {
+        Route::post('/follow', 'follow');
+        Route::post('/un_follow', 'un_follow');
+    });
+    Route::controller('VideosManager')->prefix('video')->group(function () {
+        Route::post('/like', 'like');
+        Route::post('/dislike', 'dislike');
     });
 });

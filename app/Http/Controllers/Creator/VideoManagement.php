@@ -11,6 +11,7 @@ use App\Models\UploadedVideos;
 
 class VideoManagement extends Controller
 {
+    
     public function delete(Request $request)
     {
         $request->validate([

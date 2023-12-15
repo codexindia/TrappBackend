@@ -18,6 +18,14 @@ class UploadedVideos extends Model
         }
         return null;
     }
+    public function getVideoLocAttribute($value)
+    {
+        if(!$value == null)
+        {
+            return asset(Storage::url($value));
+        }
+        return null;
+    }
     public function Creator()
     {
         return $this->hasOne(Creator::class, 'id', 'creator_id');

@@ -17,10 +17,12 @@ class VideoManagement extends Controller
         $request->validate([
             'id' => 'required|exists:uploaded_videos,id'
         ]);
-        UploadedVideos::where([
+        $vid = UploadedVideos::where([
             'creator_id' => $request->user()->id,
             'id' => $request->id,
-        ])->delete();
+        ])->get();
+        Storage::delete([$vid->video_loc, $vid->thumbnail]);
+        $vid->delete();
         return response()->json([
             'status' => true,
             'message' => 'video deleted successfully'
@@ -106,7 +108,7 @@ class VideoManagement extends Controller
                 }
 
 
-                $proof_src = '/public/videos/' . $chunk->createFileName();
+                $proof_src = 'videos/' . $chunk->createFileName();
                 $update_values['video_loc'] = $proof_src;
                 //upload complete record
                 UploadedVideos::create($update_values);

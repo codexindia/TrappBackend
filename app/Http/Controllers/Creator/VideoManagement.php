@@ -106,7 +106,7 @@ class VideoManagement extends Controller
                 }
 
 
-                $proof_src = '/storage/videos/' . $chunk->createFileName();
+                $proof_src = '/public/videos/' . $chunk->createFileName();
                 $update_values['video_loc'] = $proof_src;
                 //upload complete record
                 UploadedVideos::create($update_values);

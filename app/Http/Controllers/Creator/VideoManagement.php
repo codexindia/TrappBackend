@@ -20,7 +20,7 @@ class VideoManagement extends Controller
         $vid = UploadedVideos::where([
             'creator_id' => $request->user()->id,
             'id' => $request->id,
-        ])->get();
+        ])->first();
         Storage::delete([$vid->video_loc, $vid->thumbnail]);
         $vid->delete();
         return response()->json([

@@ -15,29 +15,20 @@ class CreatorProfile extends Controller
         if ($result == 1) {
             return response()->json([
                 'status' => true,
-                'message' => 'success'
+                'message' => 'follow success'
             ]);
-        } else {
-            return response()->json([
-                'status' => false,
-                'message' => $result
-            ]);
-        }
-    }
-    public function un_follow(Request $request)
-    {
-        $request->validate(['creator_id' => 'required|exists:creators,id']);
-        $result = unfollow($request->creator_id, $request->user()->id);
-        if ($result == 1) {
+        } elseif( $result == 2) {
             return response()->json([
                 'status' => true,
-                'message' => 'success'
+                'message' => 'unfollow success'
             ]);
-        } else {
+        }else
             return response()->json([
                 'status' => false,
                 'message' => $result
             ]);
         }
     }
-}
+   
+    
+

@@ -11,7 +11,7 @@ if (!function_exists('follow')) {
             'user_id' => $user_id,
             'action' => 'follow'
         ])->exists()) {
-            return "Error Already Followed";
+            return unfollow($creator_id, $user_id);
         } else {
             VideoAnalytics::create([
                 'creator_id' => $creator_id,
@@ -38,7 +38,7 @@ if (!function_exists('unfollow')) {
                 'user_id' => $user_id,
                 'action' => 'follow',
             ])->delete();
-            return 1;
+            return 2;
         }
     }
 }

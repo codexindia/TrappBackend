@@ -41,7 +41,7 @@ class VideosManager extends Controller
             if ($query->exists())
             $data['followed'] = 1;
             $query = VideoAnalytics::where([
-                'user_id' => $request->user()->id,
+                
                 'action' => 'like',
             ])->count();
             $data['like_count'] = $query;

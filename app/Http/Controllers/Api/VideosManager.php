@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\UploadedVideos;
+use App\Models\VideoAnalytics;
 
 class VideosManager extends Controller
 {
@@ -14,11 +15,40 @@ class VideosManager extends Controller
             'video_id' => 'required|exists:uploaded_videos,id'
         ]);
         $video_id = $request->video_id;
-        $data = UploadedVideos::with('Creator:id,channel_name')->where('id', $video_id)->first();
-      return response()->json([
-        'status' => true,
-        'data' => $data
-      ]);
+        $data = UploadedVideos::with('Creator:id,channel_name,channel_logo,first_name,last_name')->where('id', $video_id)->first();
+        $data->creator->makeHidden(['email','created_at','updated_at','contact_address','first_name','last_name','phone_number']);
+        $data['like'] = 0;
+        $data['dislike'] = 0;
+        $data['followed'] = 0;
+        $data['like_count'] = 0;
+        $data['creator']['follow_count'] = follow_count($data->creator->id);
+        $query = VideoAnalytics::where([
+            'user_id' => $request->user()->id,
+            'action' => 'like',
+        ])->whereJsonContains('attribute', ['video_id' => $video_id]);
+        if ($query->exists())
+            $data['like'] = 1;
+        $query = VideoAnalytics::where([
+            'user_id' => $request->user()->id,
+            'action' => 'dislike',
+        ])->whereJsonContains('attribute', ['video_id' => $video_id]);
+        if ($query->exists())
+            $data['dislike'] = 1;
+            $query = VideoAnalytics::where([
+                'user_id' => $request->user()->id,
+                'action' => 'follow',
+            ]);
+            if ($query->exists())
+            $data['followed'] = 1;
+            $query = VideoAnalytics::where([
+                'user_id' => $request->user()->id,
+                'action' => 'like',
+            ])->count();
+            $data['like_count'] = $query;
+        return response()->json([
+            'status' => true,
+            'data' => $data
+        ]);
     }
     public function like(Request $request)
     {

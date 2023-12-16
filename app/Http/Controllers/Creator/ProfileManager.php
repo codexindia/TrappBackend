@@ -25,9 +25,11 @@ class ProfileManager extends Controller
             'first_name' => 'required',
             'last_name' => 'required',
             'channel_logo' => 'image|mimes:jpg,png,jpeg,gif,svg|max:2048',
-            'channel_banner' => 'image|mimes:jpg,png,jpeg,gif,svg|max:2048'
+            'channel_banner' => 'image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+            'channel_name' => 'required',
         ]);
         $update_values = array();
+        $update_values['channel_name'] = $request->channel_name;
         $update_values['email'] = $request->email;
         $update_values['first_name'] = $request->first_name;
         $update_values['last_name'] = $request->last_name;

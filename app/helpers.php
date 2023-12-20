@@ -63,6 +63,13 @@ if (!function_exists('like')) {
             'action' => 'like',
         ])->whereJsonContains('attribute', ['video_id' => $video_id]);
         if (!$query->exists()) {
+            $query = VideoAnalytics::where([
+                'creator_id' => $creator_id,
+                'user_id' => $user_id,
+                'action' => 'dislike',
+            ])->whereJsonContains('attribute', ['video_id' => $video_id]);
+            $query->delete();
+
             VideoAnalytics::create([
                 'creator_id' => $creator_id,
                 'user_id' => $user_id,
@@ -86,6 +93,13 @@ if (!function_exists('dislike')) {
             'action' => 'dislike',
         ])->whereJsonContains('attribute', ['video_id' => $video_id]);
         if (!$query->exists()) {
+
+            $query = VideoAnalytics::where([
+                'creator_id' => $creator_id,
+                'user_id' => $user_id,
+                'action' => 'like',
+            ])->whereJsonContains('attribute', ['video_id' => $video_id]);
+            $query->delete();
             VideoAnalytics::create([
                 'creator_id' => $creator_id,
                 'user_id' => $user_id,

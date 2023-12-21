@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string('thumbnail');
             $table->string('video_loc');
             $table->enum('video_type',['normal','live'])->default('normal');
+            $table->integer('views')->default(0);
+            $table->integer('cat_id')->nullable();
             $table->timestamps();
         });
     }

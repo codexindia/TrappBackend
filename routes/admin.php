@@ -35,5 +35,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::controller('VideoManagement')->prefix('video')->group(function () {
         Route::post('video_list', 'video_list');
         Route::post('delete', 'delete');
+        Route::post('create_cat', 'create_cat');
+        Route::post('cat_list', 'cat_list');
+        Route::post('cat_edit', 'cat_edit');
     });
 });

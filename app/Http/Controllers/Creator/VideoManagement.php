@@ -8,10 +8,20 @@ use Illuminate\Support\Facades\Storage;
 use Wester\ChunkUpload\Chunk;
 use Wester\ChunkUpload\Validation\Exceptions\ValidationException;
 use App\Models\UploadedVideos;
+use App\Models\Category;
 
 class VideoManagement extends Controller
 {
-    
+    public function get_cat_list(Request $request)
+    {
+        $data = Category::orderBy('id', 'desc')->get();
+        return response()->json([
+            'status' => true,
+            'data' => $data,
+            'message' => 'cat retreive'
+        ]);
+    }
+
     public function delete(Request $request)
     {
         $request->validate([
@@ -100,13 +110,15 @@ class VideoManagement extends Controller
                     'title' => $request->title,
                     'description' => $request->description,
                     'creator_id' => $request->user()->id,
-                    'privacy' => $request->privacy
+                    'privacy' => $request->privacy,
                 );
                 if ($request->hasFile('thumbnail')) {
                     $thumbnail = Storage::put('public/videos/thumbnail', $request->file('thumbnail'));
                     $update_values['thumbnail'] = $thumbnail;
                 }
-
+                if ($request->has('cat_id')) {
+                    $update_values['cat_id'] = $request->cat_id;
+                }
 
                 $proof_src = 'videos/' . $chunk->createFileName();
                 $update_values['video_loc'] = $proof_src;

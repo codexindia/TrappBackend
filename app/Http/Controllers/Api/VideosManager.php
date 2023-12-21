@@ -3,12 +3,35 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\UploadedVideos;
 use App\Models\VideoAnalytics;
 
 class VideosManager extends Controller
 {
+    public function get_cat_list()
+    {
+        $data = Category::orderBy('id', 'desc')->get();
+        return response()->json([
+            'status' => true,
+            'data' => $data,
+            'message' => 'cat retreive'
+        ]);
+    }
+    public function get_vid_by_cat(Request $request)
+    {
+        $request->validate([
+            'cat_id' => 'required',
+        ]);
+        $data = UploadedVideos::where('cat_id',$request->cat_id)->orderBy('id', 'desc')->paginate(10);
+        return response()->json([
+            'status' => true,
+            'data' => $data,
+            'message' => 'Video fetched By Cat'
+        ]);
+    }
+
     public function get_v_details(Request $request)
     {
         $request->validate([
@@ -16,7 +39,8 @@ class VideosManager extends Controller
         ]);
         $video_id = $request->video_id;
         $data = UploadedVideos::with('Creator:id,channel_name,channel_logo,first_name,last_name')->where('id', $video_id)->first();
-        $data->creator->makeHidden(['email','created_at','updated_at','contact_address','first_name','last_name','phone_number']);
+        UploadedVideos::find($request->video_id)->increment('views', 1);
+        $data->creator->makeHidden(['email', 'created_at', 'updated_at', 'contact_address', 'first_name', 'last_name', 'phone_number']);
         $data['like'] = 0;
         $data['dislike'] = 0;
         $data['followed'] = 0;
@@ -34,17 +58,18 @@ class VideosManager extends Controller
         ])->whereJsonContains('attribute', ['video_id' => $video_id]);
         if ($query->exists())
             $data['dislike'] = 1;
-            $query = VideoAnalytics::where([
-                'user_id' => $request->user()->id,
-                'action' => 'follow',
-            ]);
-            if ($query->exists())
+        $query = VideoAnalytics::where([
+            'user_id' => $request->user()->id,
+            'action' => 'follow',
+        ]);
+        if ($query->exists())
             $data['followed'] = 1;
-            $query = VideoAnalytics::where([
-                
-                'action' => 'like',
-            ])->count();
-            $data['like_count'] = $query;
+        $query = VideoAnalytics::where([
+
+            'action' => 'like',
+        ])->count();
+        $data['like_count'] = $query;
+
         return response()->json([
             'status' => true,
             'data' => $data

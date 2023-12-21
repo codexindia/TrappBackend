@@ -43,6 +43,9 @@ Route::middleware(['auth:sanctum','user.check'])->group(function () {
         Route::post('/un_follow', 'un_follow');
     });
     Route::controller('VideosManager')->prefix('video')->group(function () {
+        Route::post('/get_cat_list', 'get_cat_list');
+        Route::post('/get_vid_by_cat', 'get_vid_by_cat');
+        
         Route::post('/like', 'like');
         Route::post('/get_v_details', 'get_v_details');
         Route::post('/dislike', 'dislike');

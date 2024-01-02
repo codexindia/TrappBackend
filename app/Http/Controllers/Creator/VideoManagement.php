@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Creator;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Wester\ChunkUpload\Chunk;
 use Wester\ChunkUpload\Validation\Exceptions\ValidationException;
@@ -12,6 +13,15 @@ use App\Models\Category;
 
 class VideoManagement extends Controller
 {
+    private  $baseurl;
+
+    public function __construct()
+    {
+        if (env('VIDEO_API_ENV') == 'sandbox')
+            $this->baseurl = 'sandbox.api.video';
+        else
+            $this->baseurl = 'ws.api.video';
+    }
     public function get_cat_list(Request $request)
     {
         $data = Category::orderBy('id', 'desc')->get();
@@ -141,6 +151,95 @@ class VideoManagement extends Controller
             $e->response(422)->json([
                 'message' => $e->getMessage(),
                 'data' => $e->getErrors(),
+            ]);
+        }
+    }
+
+    public function create_live(Request $request)
+    {
+
+       
+        $request->validate([
+            'title' => 'required|min:6|max:50',
+            'description' => 'min:6|max:5000',
+            'privacy' => 'required|in:public,private',
+            'thumbnail' => 'required|image'
+        ]); {
+
+            $response = Http::withBasicAuth(env('VIDEO_API'), 'username')->post('https://' . $this->baseurl . '/live-streams', [
+                'name' => $request->title,
+            ]);
+            if ($response) {
+
+                $update_values = array(
+                    'title' => $request->title,
+                    'description' => $request->description,
+                    'creator_id' => $request->user()->id,
+                    'privacy' => $request->privacy,
+                    'video_type' => 'live',
+                    'live_api_data' => $response,
+
+
+                );
+                if ($request->hasFile('thumbnail')) {
+                    $thumbnail = Storage::put('public/videos/thumbnail', $request->file('thumbnail'));
+                    $update_values['thumbnail'] = $thumbnail;
+                }
+                if ($request->has('cat_id')) {
+                    $update_values['cat_id'] = $request->cat_id;
+                }
+
+
+                //upload complete record
+
+                $response = json_decode($response);
+                $update_values['video_loc'] = $response->assets->hls;
+                $result = UploadedVideos::create($update_values);
+                $thumbnail = Http::withBasicAuth(env('VIDEO_API'), 'username')->attach(
+                        'file',
+                        $request->file('thumbnail'),
+                        'photo.jpg'
+                    )->post('https://' . $this->baseurl . '/live-streams/' . $response->liveStreamId . '/thumbnail');
+            }
+            return response()->json([
+                'status' => true,
+                'data' => array(
+                    'vid_id' => $result->id,
+                    'stream_id' => $response->liveStreamId,
+                    'streamKey' => $response->streamKey,
+                    'streamUrl' => 'rtmp://broadcast.api.video/s',
+                    'broadcasting' => $response->broadcasting,
+                    'hls_player' => $response->assets->hls
+                ),
+                'message' => 'stream created successFully'
+            ]);
+        }
+    }
+    public function fetch_live(Request $request)
+    {
+        $request->validate([
+            'vid_id' => 'required|exists:uploaded_videos,id'
+        ]);
+        $data = UploadedVideos::find($request->vid_id);
+        if ($data->video_type != 'live') {
+            return "video not live video";
+        }
+        $liveStreamId = json_decode($data->live_api_data)->liveStreamId;
+        $response = Http::withBasicAuth(env('VIDEO_API'), 'username')->get('https://' . $this->baseurl . '/live-streams/' . $liveStreamId);
+        if (isset(json_decode($response)->liveStreamId)) {
+            $data->update([
+                'live_api_data' => $response
+            ]);
+            $response = json_decode($response);
+            return response()->json([
+                'status' => true,
+                'data' => array(
+                    'stream_id' => $response->liveStreamId,
+                    'streamKey' => $response->streamKey,
+                    'streamUrl' => 'rtmp://broadcast.api.video/s',
+                    'broadcasting' => $response->broadcasting,
+                    'hls_player' => $response->assets->hls,
+                )
             ]);
         }
     }

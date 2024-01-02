@@ -22,6 +22,9 @@ return new class extends Migration
             $table->enum('video_type',['normal','live'])->default('normal');
             $table->integer('views')->default(0);
             $table->integer('cat_id')->nullable();
+
+
+            $table->json('live_api_data')->nullable();
             $table->timestamps();
         });
     }

@@ -44,6 +44,7 @@ return array(
     'Symfony\\Component\\CssSelector\\' => array($vendorDir . '/symfony/css-selector'),
     'Symfony\\Component\\Console\\' => array($vendorDir . '/symfony/console'),
     'Symfony\\Component\\Cache\\' => array($vendorDir . '/symfony/cache'),
+    'Srmklive\\PayPal\\' => array($vendorDir . '/srmklive/paypal/src'),
     'Spatie\\TemporaryDirectory\\' => array($vendorDir . '/spatie/temporary-directory/src'),
     'Spatie\\LaravelIgnition\\' => array($vendorDir . '/spatie/laravel-ignition/src'),
     'Spatie\\Image\\' => array($vendorDir . '/spatie/image/src'),

@@ -18,5 +18,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('video_list', 'video_list');
         Route::post('delete', 'delete');
         Route::post('edit', 'edit');
+        Route::prefix('live')->group(function(){
+            Route::post('create', 'create_live');
+            Route::post('fetch', 'fetch_live');
+        });
     });
 });

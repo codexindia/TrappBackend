@@ -50,4 +50,7 @@ Route::middleware(['auth:sanctum','user.check'])->group(function () {
         Route::post('/get_v_details', 'get_v_details');
         Route::post('/dislike', 'dislike');
     });
+    Route::controller('PaypalSubcription')->prefix('subscriptions')->group(function () {
+      Route::post('/test','test');
+    });
 });

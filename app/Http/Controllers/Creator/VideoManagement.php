@@ -239,6 +239,11 @@ class VideoManagement extends Controller
                     'streamUrl' => 'rtmp://broadcast.api.video/s',
                     'broadcasting' => $response->broadcasting,
                     'hls_player' => $response->assets->hls,
+                ),
+                'statics' => array(
+                    'likes' => 0,
+                    'views' => 0,
+                   
                 )
             ]);
         }

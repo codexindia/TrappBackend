@@ -11,6 +11,7 @@
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
         "pbmedia/laravel-ffmpeg": "^8.3",
+        "pusher/pusher-php-server": "*",
         "spatie/image": "^2.2",
         "srmklive/paypal": "^3.0",
         "wester/chunk-upload": "^2.6"

@@ -53,4 +53,8 @@ Route::middleware(['auth:sanctum','user.check'])->group(function () {
     Route::controller('PaypalSubcription')->prefix('subscriptions')->group(function () {
       Route::post('/test','test');
     });
+    Route::controller('ChatsController')->prefix('livechat')->group(function () {
+        Route::post('/messages','sendMessage');
+      
+      });
 });

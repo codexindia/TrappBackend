@@ -25,6 +25,10 @@ class User extends Authenticatable
         'country_code',
         'profile_pic'
     ];
+    public function messages()
+    {
+        return $this->hasMany(Message::class);
+    }    
     public function UserBlocked()
     {
         return $this->hasOne(UserBand::class, 'user_id', 'id');

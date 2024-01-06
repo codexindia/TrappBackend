@@ -18,14 +18,14 @@ class ChatsController extends Controller
 
         $message = [
 
-            "id" => Auth::user()->id,
-            "name" => Auth::user()->name,
-            "message" => $request->message
+            "id" => $request->user()->id,
+            "name" => $request->user()->name,
+            "message" => $request->message,
+            "avatar" => $request->user()->profile_pic
         ];
-        
-        
+
+        return $message;
         event(new \App\Events\MessageSent($message));
         return "true";
     }
-    
 }

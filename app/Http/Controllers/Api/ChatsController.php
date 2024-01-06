@@ -7,6 +7,7 @@ use App\Events\MessageSent;
 use App\Http\Controllers\Controller;
 
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Pusher\Pusher;
@@ -17,7 +18,7 @@ class ChatsController extends Controller
     {
 
         $message = [
-
+            "time" => Carbon::now(),
             "id" => $request->user()->id,
             "name" => $request->user()->name,
             "message" => $request->message,

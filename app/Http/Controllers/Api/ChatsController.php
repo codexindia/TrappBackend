@@ -24,7 +24,7 @@ class ChatsController extends Controller
             "avatar" => $request->user()->profile_pic
         ];
 
-       
+    
         event(new \App\Events\MessageSent($message));
         return "true";
     }

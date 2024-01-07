@@ -18,7 +18,7 @@ class ChatsController extends Controller
     {
         $request->validate([
          'message' => 'required',
-         'video_id' => 'required|exists:UploadedVideos,id'
+         'video_id' => 'required'
         ]);
  
         $message = [

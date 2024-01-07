@@ -14,7 +14,10 @@ return new class extends Migration
         //database/migrations/<creation_date_>create_messages_table.php
         Schema::create('messages', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id')->unsigned();
+            $table->integer('video_id');
+            $table->integer('user_id');
+            $table->text('name');
+            $table->text('avatar')->nullable();
             $table->text('message');
             $table->timestamps();
         });

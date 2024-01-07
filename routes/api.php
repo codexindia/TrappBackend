@@ -55,6 +55,6 @@ Route::middleware(['auth:sanctum','user.check'])->group(function () {
     });
     Route::controller('ChatsController')->prefix('livechat')->group(function () {
         Route::post('/messages','sendMessage');
-      
+        Route::post('/fetch','fetch');
       });
 });

@@ -48,6 +48,9 @@ class ChatsController extends Controller
             'video_id' => 'required',
         ]);
         $data = Message::where('video_id', $request->video_id)->limit(10)->orderBy('id', 'desc')->get(['id','name', 'avatar', 'message', 'created_at']);
-        return response($data);
+        return response()->json([
+            'status' => true,
+            'data' => $data
+        ]);
     }
 }

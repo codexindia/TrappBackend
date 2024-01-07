@@ -26,6 +26,7 @@ class ChatsController extends Controller
             "id" => $request->user()->id,
             "name" => $request->user()->name,
             "message" => $request->message,
+            "type" => "user",
             "avatar" => $request->user()->profile_pic,
             "video_id" => $request->video_id,
         ];
@@ -33,6 +34,7 @@ class ChatsController extends Controller
             "user_id" => $request->user()->id,
             "name" => $request->user()->name,
             "message" => $request->message,
+            "type" => "user",
             "avatar" => $request->user()->profile_pic,
             "video_id" => $request->video_id,
         ]);

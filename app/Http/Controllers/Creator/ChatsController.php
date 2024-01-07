@@ -21,6 +21,7 @@ class ChatsController extends Controller
             "created_at" => Carbon::now(),
             "id" => $user->id,
             "name" =>$user->channel_name,
+            "type" => "creator",
             "message" => $request->message,
             "avatar" => $user->channel_logo,
             "video_id" => $request->video_id,

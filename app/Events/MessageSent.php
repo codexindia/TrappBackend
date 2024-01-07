@@ -19,7 +19,7 @@ class MessageSent implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $message;
-
+    public $video_id;
     /**
      * Create a new event instance.
      */
@@ -27,6 +27,7 @@ class MessageSent implements ShouldBroadcast
     {
 
         $this->message = $message;
+        $this->video_id = $message['video_id'];
     }
 
     /**
@@ -37,7 +38,7 @@ class MessageSent implements ShouldBroadcast
     public function broadcastOn(): array
     {
         
-        return ['chat-message'];
+        return [$this->video_id];
     }
     
 

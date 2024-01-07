@@ -16,17 +16,25 @@ class ChatsController extends Controller
 {
     public function sendMessage(Request $request)
     {
-
+        $request->validate([
+         'message' => 'required',
+         'video_id' => 'required|exists:UploadedVideos,id'
+        ]);
+ 
         $message = [
             "time" => Carbon::now(),
             "id" => $request->user()->id,
             "name" => $request->user()->name,
             "message" => $request->message,
-            "avatar" => $request->user()->profile_pic
+            "avatar" => $request->user()->profile_pic,
+            "video_id" => $request->video_id,
         ];
 
     
         event(new \App\Events\MessageSent($message));
-        return "true";
+        return response()->json([
+            'status' => true,
+
+        ]);
     }
 }

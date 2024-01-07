@@ -16,6 +16,7 @@ return new class extends Migration
             $table->increments('id');
             $table->integer('video_id');
             $table->integer('user_id');
+            $table->enum('type',['user','creator']);
             $table->text('name');
             $table->text('avatar')->nullable();
             $table->text('message');

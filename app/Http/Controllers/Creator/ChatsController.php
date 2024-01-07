@@ -1,16 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Creator;
 
-
-use App\Events\MessageSent;
 use App\Http\Controllers\Controller;
 use App\Models\Message;
-use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Pusher\Pusher;
+use Illuminate\Support\Carbon;
 
 class ChatsController extends Controller
 {
@@ -20,24 +15,26 @@ class ChatsController extends Controller
             'message' => 'required',
             'video_id' => 'required'
         ]);
+        $user = $request->user();
 
         $message = [
             "created_at" => Carbon::now(),
-            "id" => $request->user()->id,
-            "name" => $request->user()->name,
+            "id" => $user->id,
+            "name" =>$user->channel_name,
             "message" => $request->message,
-            "avatar" => $request->user()->profile_pic,
+            "avatar" => $user->channel_logo,
             "video_id" => $request->video_id,
         ];
         Message::create([
-            "user_id" => $request->user()->id,
-            "name" => $request->user()->name,
+            "user_id" => $user->id,
+            "name" => $user->channel_name,
             "message" => $request->message,
-            "avatar" => $request->user()->profile_pic,
+            "type" => "creator",
+            "avatar" => $user->channel_logo,
             "video_id" => $request->video_id,
         ]);
 
-        event(new \App\Events\MessageSent($message));
+        event(new \App\Events\MessageSent($message, 'creator'));
         return response()->json([
             'status' => true,
         ]);
@@ -47,7 +44,7 @@ class ChatsController extends Controller
         $request->validate([
             'video_id' => 'required',
         ]);
-        $data = Message::where('video_id', $request->video_id)->limit(200)->orderBy('id', 'desc')->get(['id','type','name', 'avatar', 'message', 'created_at']);
+        $data = Message::where('video_id', $request->video_id)->limit(200)->orderBy('id', 'desc')->get(['id', 'type','name', 'avatar', 'message', 'created_at']);
         return response()->json([
             'status' => true,
             'data' => $data

@@ -23,4 +23,8 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::post('fetch', 'fetch_live');
         });
     });
+    Route::controller('ChatsController')->prefix('livechat')->group(function () {
+        Route::post('/messages','sendMessage');
+        Route::post('/fetch','fetch');
+      });
 });

@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\VerficationCodes;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
+use Twilio\Rest\Client as Twilio;
 
 class AuthManager extends Controller
 {
@@ -113,8 +115,8 @@ class AuthManager extends Controller
         ],[
             'phone.exists' => 'Phone Number Has Not Registered',
         ]);
-
-        if ($this->genarateotp($request->phone)) {
+        $temp = ['country_code' => $request->country_code];
+        if ($this->genarateotp($request->phone,$temp)) {
             return response()->json([
                 'status' => true,
                 'message' => 'OTP send successfully',
@@ -162,8 +164,8 @@ class AuthManager extends Controller
                 'temp' => json_encode($temp),
             ]);
         } else {
-           // $otp = rand('100000', '999999');
-           $otp = 123456;
+            $otp = rand('100000', '999999');
+           //$otp = 123456;
             VerficationCodes::create([
                 'temp' => json_encode($temp),
                 'phone' => $number,
@@ -171,27 +173,25 @@ class AuthManager extends Controller
                 'expire_at' => Carbon::now()->addMinute(10)
             ]);
         }
+        ;
+        $receiverNumber = '+'.$temp['country_code'].$number;
+        $message = "Hello\nTrapp Verification OTP is ".$otp;
+  
         try {
-            $response = Http::withHeaders([
-                'authorization' => env('FAST2SMS'),
-                'accept' => '*/*',
-                'cache-control' => 'no-cache',
-                'content-type' => 'application/json'
-            ])->post('https://www.fast2sms.com/dev/bulkV2', [
-                "variables_values" => $otp,
-                "route" => "dlt",
-                "sender_id" => "QKPCKT",
-                "message" => "159560",
-                "numbers" => $number,
-            ]);
-            $decode = json_decode($response);
-            if ($decode->return) {
-                return true;
-            } else {
-                return false;
-            }
-        } catch (\Exception $e) {
-            return $e->getMessage();
+  
+            $account_sid = getenv("TWILIO_SID");
+            $auth_token = getenv("TWILIO_TOKEN");
+            $twilio_number = getenv("TWILIO_FROM");
+  
+            $client = new Twilio($account_sid, $auth_token);
+            $client->messages->create($receiverNumber, [
+                'from' => $twilio_number, 
+                'body' => $message]);
+  
+            return true;
+  
+        } catch (Exception $e) {
+            dd("Error: ". $e->getMessage());
         }
     }
-}
+    }

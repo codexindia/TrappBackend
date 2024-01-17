@@ -15,7 +15,10 @@ class CreatorProfile extends Controller
             'cre_id' => 'required|exists:creators,id'
         ]);
         $data = Creator::select('first_name','last_name','channel_name','channel_banner','channel_logo')->find($request->cre_id);
-       $vList = UploadedVideos::where('creator_id',$request->cre_id)->orderBy('id','desc')->get();
+       $vList = UploadedVideos::where([
+        'creator_id'=>$request->cre_id,
+        'privacy' => 'public'
+        ])->orderBy('id','desc')->get('id','title','description','thumbnail','live_api_data','type','views');
         $data['is_followd'] = true;
         $data['follow_counts'] = 34;
         $data['videos_counts'] = 244;

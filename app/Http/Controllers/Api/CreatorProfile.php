@@ -18,7 +18,7 @@ class CreatorProfile extends Controller
        $vList = UploadedVideos::where([
         'creator_id'=>$request->cre_id,
         'privacy' => 'public'
-        ])->orderBy('id','desc')->get(['id','title','description','thumbnail','live_api_data','type','views']);
+        ])->orderBy('id','desc')->get(['id','title','description','thumbnail','live_api_data','video_type','views']);
         $data['is_followd'] = true;
         $data['follow_counts'] = 34;
         $data['videos_counts'] = 244;

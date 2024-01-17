@@ -16,14 +16,17 @@ class PaypalSubcription extends Controller
     public function __construct()
     {
         $this->provider = new PayPalClient;
-        //$this->provider->setApiCredentials(config('paypal'));
+        $this->provider->setApiCredentials(config('paypal'));
         $this->provider->getAccessToken();
     }
     public function test($amount = 7, $paypalPlanId = "P-89T130169W294933AMWHQJXA")
     {
-        return $this->provider->addProductById('PROD-35J84284BS393300E')
-            ->addBillingPlanById('P-12H508389L3242414MWH6GGI')
-            ->setReturnAndCancelUrl('https://example.com/paypal-success', 'https://example.com/paypal-cancel')
-            ->setupSubscription('Sudipto Bain', 'sb-no9jq28956608@personal.example.com', Carbon::now()->addDays(1));
+        
+        return $this->provider->addProduct('Demo Product', 'Demo Product', 'SERVICE', 'SOFTWARE')
+        ->addCustomPlan('Demo Plan', 'Demo Plan', 150, 'MONTH', 3)
+        ->setReturnAndCancelUrl('https://example.com/paypal-success', 'https://example.com/paypal-cancel')
+        ->setupSubscription('John Doe', 'john@example.com', Carbon::now()->addDays(1));
+      
+      
     }
 }

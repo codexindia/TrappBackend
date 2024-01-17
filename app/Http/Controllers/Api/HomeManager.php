@@ -13,7 +13,7 @@ class HomeManager extends Controller
         $live_video = UploadedVideos::where("video_type", 'live')->inRandomOrder()->limit(10)->get();
         $data = array(
             'normal_video' => $normal_video,
-            '$live_video' => $live_video
+            'live_video' => $live_video
         );
         return response()->json([
             'status' => true,

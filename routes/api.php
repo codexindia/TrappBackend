@@ -40,6 +40,7 @@ Route::middleware(['auth:sanctum','user.check'])->group(function () {
     });
     Route::controller('CreatorProfile')->prefix('creator')->group(function () {
         Route::post('/follow', 'follow');
+        Route::post('/channelView', 'channelView');
         Route::post('/un_follow', 'un_follow');
     });
     Route::controller('VideosManager')->prefix('video')->group(function () {

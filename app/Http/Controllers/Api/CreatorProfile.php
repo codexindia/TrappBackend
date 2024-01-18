@@ -19,7 +19,7 @@ class CreatorProfile extends Controller
         $vList = UploadedVideos::where([
             'creator_id' => $request->cre_id,
             'privacy' => 'public'
-        ])->orderBy('id', 'desc')->select('id', 'title', 'thumbnail', 'video_loc', 'video_type', 'views')->paginate(2);
+        ])->orderBy('id', 'desc')->select('id', 'title', 'thumbnail', 'video_loc', 'video_type', 'views');
        
         $query = VideoAnalytics::where([
             'user_id' => $request->user()->id,
@@ -34,7 +34,7 @@ class CreatorProfile extends Controller
         $data['follow_counts'] = follow_count($request->cre_id);
         $data['videos_counts'] = $vList->count();
         $data['playlist_count'] = 0;
-        $data['videosOrLives'] =  $vList;
+        $data['videosOrLives'] =  $vList->paginate(2);
         return response()->json([
             'status' => true,
             'data' => $data,

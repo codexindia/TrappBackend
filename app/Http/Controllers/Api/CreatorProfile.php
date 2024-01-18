@@ -19,7 +19,7 @@ class CreatorProfile extends Controller
         $vList = UploadedVideos::where([
             'creator_id' => $request->cre_id,
             'privacy' => 'public'
-        ])->orderBy('id', 'desc')->get(['id', 'title', 'thumbnail', 'video_loc', 'video_type', 'views']);
+        ])->orderBy('id', 'desc')->select('id', 'title', 'thumbnail', 'video_loc', 'video_type', 'views')->paginate(2);
        
         $query = VideoAnalytics::where([
             'user_id' => $request->user()->id,

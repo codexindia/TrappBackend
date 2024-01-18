@@ -33,7 +33,7 @@ class CreatorProfile extends Controller
         
         $data['follow_counts'] = follow_count($request->cre_id);
         $data['videos_counts'] = $vList->count();
-        $data['playlist_count'] = 1;
+        $data['playlist_count'] = 0;
         $data['videosOrLives'] =  $vList;
         return response()->json([
             'status' => true,

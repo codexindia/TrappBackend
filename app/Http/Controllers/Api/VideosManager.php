@@ -61,6 +61,7 @@ class VideosManager extends Controller
         $query = VideoAnalytics::where([
             'user_id' => $request->user()->id,
             'action' => 'follow',
+            'creator_id' => $data->creator->id,
         ]);
         if ($query->exists())
             $data['followed'] = 1;

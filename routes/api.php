@@ -58,4 +58,7 @@ Route::middleware(['auth:sanctum','user.check'])->group(function () {
         Route::post('/messages','sendMessage');
         Route::post('/fetch','fetch');
       });
+      Route::controller('StickersManagement')->prefix('stickers')->group(function () {
+        Route::post('/fetch','fetch');
+      });
 });

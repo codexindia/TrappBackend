@@ -54,6 +54,12 @@ Route::middleware(['auth:sanctum','user.check'])->group(function () {
     Route::controller('PaypalSubcription')->prefix('subscriptions')->group(function () {
       Route::post('/test','test');
     });
+    Route::controller('StripeController')->prefix('payment')->group(function () {
+        Route::post('/CallSubscription','CallSubsCription');
+        Route::post('/CheckSubscription','CheckSubscription');
+        Route::post('/BuyCoins','BuyCoins');
+        Route::any('/webhook','webhook')->withoutMiddleware(['auth:sanctum','user.check']);
+      });
     Route::controller('ChatsController')->prefix('livechat')->group(function () {
         Route::post('/messages','sendMessage');
         Route::post('/fetch','fetch');

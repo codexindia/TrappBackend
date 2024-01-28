@@ -73,7 +73,7 @@ class StripeController extends Controller
     public function webhook(Request $request)
     {
         $payload = @file_get_contents('php://input');
-        $endpoint_secret = 'whsec_b52a89681a8728a98b5a8440755b81c7c8ccc2e59ea7a6e72e44c985ac022a4b';
+        $endpoint_secret = 'whsec_CZTsKFy12R9ZvjTYnjcO3q8gK7SOmDlf';
         $sig_header = $_SERVER['HTTP_STRIPE_SIGNATURE'];
         $event = null;
         

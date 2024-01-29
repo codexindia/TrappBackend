@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\CoinBundle;
 use Illuminate\Support\Facades\Log;
+use App\Models\UserOrders;
+
 class StripeController extends Controller
 {
     private $stripe;
@@ -13,27 +16,43 @@ class StripeController extends Controller
     {
         $this->stripe = new \Stripe\StripeClient(env('STRIPE_SECRET'));
     }
-    public function CallSubsCription()
+    public function CallSubsCription(Request $request)
     {
-      
-     
-         return $this->stripe->checkout->sessions->create([
+
+
+        $payment_init = $this->stripe->checkout->sessions->create([
             'success_url' => 'https://example.com/success',
             'line_items' => [
-              [
-                'price' => 'price_1Odd84EWrX6kyCsNluSkvWKA',
-                'quantity' => 1,
-              ],
+                [
+                    'price' => 'price_1Odd84EWrX6kyCsNluSkvWKA',
+                    'quantity' => 1,
+                ],
             ],
             'mode' => 'subscription',
         ]);
-        
+        $price = $this->stripe->prices->retrieve('price_1Odd84EWrX6kyCsNluSkvWKA', []);
+        $createOrder = new UserOrders();
+        $createOrder->user_id = $request->user()->id;
+        $createOrder->order_id = $payment_init->id;
+        $createOrder->product_id = $request->coin_bundle_id;
+        $createOrder->product_type = 'subscription';
+        $createOrder->price = $price->unit_amount/ 100;
+        $createOrder->description = env('APP_NAME') . ' Subscription Purchase';
+        $createOrder->type = 'subscription';
+        $createOrder->status = 'open';
+        $createOrder->save();
+        return response()->json([
+            'status' => true,
+            'payment_link' => $payment_init->url,
+            'message' => 'Payment INIT SuccessFully'
+        ]);
     }
-    public function CheckSubscription(Request $request){
-
+    public function CheckSubscription(Request $request)
+    {
         $request->validate([
             'sub_id' => 'required',
         ]);
+
         return $this->stripe->subscriptions->retrieve($request->sub_id, [])->status;
     }
     public function BuyCoins(Request $request)
@@ -42,65 +61,110 @@ class StripeController extends Controller
 
 
         $request->validate([
-         'coin_bundle_id' => 'required|exists:coin_bundles,id',
+            'coin_bundle_id' => 'required|exists:coin_bundles,id',
         ]);
-        $payment_id = 'TRP'.time();
+        $payment_id = 'TRP' . time();
         $coinData = CoinBundle::find($request->coin_bundle_id);
         $price_id = $this->stripe->prices->create([
             'currency' => 'usd',
-            'unit_amount' => $coinData->price*100,
-            'product_data' => ['name' => $coinData->coins.' Trapp Coins'],
-          ])->id;
-          $payment_init = $this->stripe->checkout->sessions->create([
-            
+            'unit_amount' => $coinData->price * 100,
+            'product_data' => ['name' => $coinData->coins . ' Trapp Coins'],
+        ])->id;
+        $payment_init = $this->stripe->checkout->sessions->create([
+
             'client_reference_id' =>  $payment_id,
             'success_url' => 'https://example.com/success',
             'line_items' => [
-              [
-                'price' => $price_id,
-                'quantity' => 1,
-              ],
+                [
+                    'price' => $price_id,
+                    'quantity' => 1,
+                ],
             ],
             'mode' => 'payment',
         ]);
-       
+        if ($payment_init->status != "open") {
+            return response()->json([
+                'status' => false,
+
+                'message' => 'Payment INIT UnSuccessFully'
+            ]);
+        }
+        $createOrder = new UserOrders();
+        $createOrder->user_id = $request->user()->id;
+        $createOrder->order_id = $payment_init->id;
+        $createOrder->product_id = $request->coin_bundle_id;
+        $createOrder->product_type = 'coins';
+        $createOrder->price = $coinData->price;
+        $createOrder->description = $coinData->coins . ' ' . env('APP_NAME') . ' Coins';
+        $createOrder->type = 'payment';
+        $createOrder->status = 'open';
+        $createOrder->save();
+
         return response()->json([
-         'status' => true,
-         'payment_link' => $payment_init->url,
-         'message' => 'Payment INIT SuccessFully'
+            'status' => true,
+            'payment_link' => $payment_init->url,
+            'message' => 'Payment INIT SuccessFully'
         ]);
     }
     public function webhook(Request $request)
     {
         $payload = @file_get_contents('php://input');
-        $endpoint_secret = 'whsec_CZTsKFy12R9ZvjTYnjcO3q8gK7SOmDlf';
+        $endpoint_secret = ENV('STRIPE_WEBHOOK');
         $sig_header = $_SERVER['HTTP_STRIPE_SIGNATURE'];
         $event = null;
-        
+
         try {
-          $event = \Stripe\Webhook::constructEvent(
-            $payload, $sig_header, $endpoint_secret
-          );
-        } catch(\UnexpectedValueException $e) {
-          // Invalid payload
-          return response('Invalid payload',400);
-        } catch(\Stripe\Exception\SignatureVerificationException $e) {
-          // Invalid signature
-          return response('Invalid signature',400);
-        
+            $event = \Stripe\Webhook::constructEvent(
+                $payload,
+                $sig_header,
+                $endpoint_secret
+            );
+        } catch (\UnexpectedValueException $e) {
+            // Invalid payload
+            return response('Invalid payload', 400);
+        } catch (\Stripe\Exception\SignatureVerificationException $e) {
+            // Invalid signature
+            return response('Invalid signature', 400);
         }
-        
+        $session = $event->data->object;
         // Handle the event
         switch ($event->type) {
-            case 'checkout.session.async_payment_failed':
-                $session = $event->data->object;
+           
+            case 'checkout.session.completed':
+                
+                $pending_order = UserOrders::where([
+                    'order_id' => $session->id,
+                    'status' => 'open'
+                ])->first();
+                if ($pending_order != null) {
+                    $up_data = array(
+                        'status' => $session->status,
+                        'payment_id' => $session->payment_intent
+                    );
+                    if (isset($session->subscription)) {
+                        $up_data['subscription_id'] = $session->subscription;
+                    }
+                    $pending_order->update($up_data);
+
+                    if ($pending_order->product_type == "coins") {
+                        $coin = CoinBundle::find($pending_order->product_id);
+                        User::find($pending_order->user_id)->increment('coins', $coin->coins);
+                    } elseif ($pending_order->product_type == "subscription") {
+                        subscription_apply($pending_order->user_id,$session->subscription);
+                    }
+                }
+                break;
+            case 'checkout.session.expired':
+                $pending_order = UserOrders::where([
+                    'order_id' => $session->id,
+                ])->delete();
                 Log::info($session);
-            case 'checkout.session.async_payment_succeeded':
-                $session = $event->data->object;
-                Log::info($session);
-          default:
-            return 'Received unknown event type ' . $event->type;
+                break;
+                case 'customer.subscription.deleted':
+                    remove_subscription($session->id);
+                   
+            default:
+                return 'Received unknown event type ' . $event->type;
         }
-        
     }
 }

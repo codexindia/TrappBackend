@@ -14,12 +14,16 @@ return new class extends Migration
         Schema::create('user_orders', function (Blueprint $table) {
             $table->id();
             $table->string('user_id');
+           
+            $table->string('product_id')->nullable();
+            $table->enum('product_type',['coins','subscription']);
             $table->string('order_id');
             $table->string('price');
             $table->string('description')->nullable();
             $table->enum('type',['payment','subscription']);
             $table->string('subscription_id')->nullable();
-            $table->string('status');
+            $table->string('payment_id')->nullable();
+            $table->string('status')->default('pending');
             $table->timestamps();
         });
     }

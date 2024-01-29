@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('phone')->unique();
             $table->string('email')->nullable()->unique();
             $table->string('profile_pic')->nullable();
+            $table->double('coins')->nullable();
             $table->timestamps();
         });
     }

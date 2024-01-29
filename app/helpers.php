@@ -1,6 +1,57 @@
 <?php
 
 use App\Models\VideoAnalytics;
+use App\Models\User;
+use App\Models\Subscriptions;
+use Carbon\Carbon;
+
+if (!function_exists('subscription_apply')) {
+
+    function subscription_apply($user_id,$sub_id = null)
+    {
+        $check_exists = Subscriptions::where('user_id',$user_id)->latest()->first();
+        if($check_exists != null)
+        {
+            $start_time = Carbon::parse($check_exists->expired_at);
+            $end_time = Carbon::parse($check_exists->expired_at)->addMonth();
+            $result = Subscriptions::create(
+                [
+                    'user_id' => $user_id,'start_at' => $start_time,
+                     'expired_at' => $end_time,'status' => 'active',
+                     'subscription_id' => $sub_id
+                ]
+            );
+            
+        }else{
+            $start_time = Carbon::now();
+            $end_time = Carbon::now()->addMonth();
+            $result = Subscriptions::create(
+                ['user_id' => $user_id,'start_at' => $start_time, 'expired_at' => $end_time,'status' => 'active','subscription_id' => $sub_id]
+            );
+        }
+        
+        if ($result) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+}
+if (!function_exists('remove_subscription')) {
+
+    function remove_subscription($sub_id = null)
+    {
+        $result = Subscriptions::where([
+          'subscription_id' => $sub_id,
+        ])->update([
+            'status' => 'expired',
+            'expired_at' => Carbon::now()
+        ]);
+        if($result)
+        return 1;
+    }
+}
+
 
 if (!function_exists('follow')) {
 

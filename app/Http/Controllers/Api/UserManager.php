@@ -10,22 +10,32 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Activitylog\Facades\CauserResolver;
+use App\Models\Subscriptions;
+use Carbon\Carbon;
 
 class UserManager extends Controller
 {
-   
+
     public function get_current_user(Request $request)
     {
-       
+
+        $check_sub = Subscriptions::where('user_id', $request->user()->id)->latest()->first();
+
+        if ($check_sub == null)
+            $check_sub = "expired";
+        else
+
+            $check_sub = Carbon::now()->isAfter($check_sub->expired_at) != true ? "active" : "expired";
         return response()->json([
             'status' => true,
             'data' => $request->user(),
+            'subscription_status' => $check_sub,
             'message' => 'User Retrived',
         ]);
     }
     public function update_user(Request $request)
     {
-      
+
         $request->validate([
             'name' => 'required',
             'email' => 'email',
@@ -46,15 +56,14 @@ class UserManager extends Controller
             $updated_filed['email'] = $request->email;
         }
         $user = User::find($request->user()->id);
-       
+
         $user->update($updated_filed);
         $param['title'] = 'lorem ipsum dolor sit amet, consectet';
         $param['subtitle'] = 'lorem ipsum dolor sit amet, consectet lorem ipsum dolor sit amet, consectet lorem ipsum dolor sit amet, consectet';
-      //  Notification::send($user, new UserAlert($param));
+        //  Notification::send($user, new UserAlert($param));
         return response()->json([
             'status' => true,
             'message' => 'User Updated SuccessFully',
         ]);
     }
-   
 }

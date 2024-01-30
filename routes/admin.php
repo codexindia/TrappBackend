@@ -44,4 +44,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('list', 'listSticker');
         Route::post('delete', 'deleteSticker');
     });
+    Route::controller('WalletManage')->prefix('wallet')->group(function () {
+        Route::post('create', 'create_new');
+        Route::post('delete', 'deleteCoinBundle');
+        Route::post('fetch', 'listCoinBundle');
+    });
 });

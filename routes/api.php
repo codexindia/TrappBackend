@@ -67,4 +67,7 @@ Route::middleware(['auth:sanctum','user.check'])->group(function () {
       Route::controller('StickersManagement')->prefix('stickers')->group(function () {
         Route::post('/fetch','fetch');
       });
+      Route::controller('WalletManager')->prefix('wallet')->group(function () {
+        Route::post('/GetCoinBundle','GetCoinBundle');
+      });
 });

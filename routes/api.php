@@ -58,6 +58,7 @@ Route::middleware(['auth:sanctum','user.check'])->group(function () {
         Route::post('/CallSubscription','CallSubsCription');
         Route::post('/CheckSubscription','CheckSubscription');
         Route::post('/BuyCoins','BuyCoins');
+        Route::get('/FetchOrder/{id}','FetchOrder');
         Route::any('/webhook','webhook')->withoutMiddleware(['auth:sanctum','user.check']);
       });
     Route::controller('ChatsController')->prefix('livechat')->group(function () {

@@ -19,6 +19,7 @@ class StripeController extends Controller
     public function CallSubsCription(Request $request)
     {
 
+           $order_id = "TRP".time();
 
         $payment_init = $this->stripe->checkout->sessions->create([
             'success_url' => 'https://example.com/success',
@@ -33,11 +34,12 @@ class StripeController extends Controller
         $price = $this->stripe->prices->retrieve('price_1Odd84EWrX6kyCsNluSkvWKA', []);
         $createOrder = new UserOrders();
         $createOrder->user_id = $request->user()->id;
-        $createOrder->order_id = $payment_init->id;
+        $createOrder->session_id = $payment_init->id;
+        $createOrder->order_id = $order_id;
         $createOrder->product_id = $request->coin_bundle_id;
         $createOrder->product_type = 'subscription';
         $createOrder->price = $price->unit_amount/ 100;
-        $createOrder->description = env('APP_NAME') . ' Subscription Purchase';
+        $createOrder->description = env('APP_NAME') . ' Subscription 1 Month';
         $createOrder->type = 'subscription';
         $createOrder->status = 'open';
         $createOrder->save();
@@ -63,7 +65,9 @@ class StripeController extends Controller
         $request->validate([
             'coin_bundle_id' => 'required|exists:coin_bundles,id',
         ]);
-        $payment_id = 'TRP' . time();
+        $order_id = "TRP".time();
+
+        $order_id = 'TRP' . time();
         $coinData = CoinBundle::find($request->coin_bundle_id);
         $price_id = $this->stripe->prices->create([
             'currency' => 'usd',
@@ -72,7 +76,7 @@ class StripeController extends Controller
         ])->id;
         $payment_init = $this->stripe->checkout->sessions->create([
 
-            'client_reference_id' =>  $payment_id,
+       
             'success_url' => 'https://example.com/success',
             'line_items' => [
                 [
@@ -91,7 +95,8 @@ class StripeController extends Controller
         }
         $createOrder = new UserOrders();
         $createOrder->user_id = $request->user()->id;
-        $createOrder->order_id = $payment_init->id;
+        $createOrder->session_id = $payment_init->id;
+        $createOrder->order_id = $order_id;
         $createOrder->product_id = $request->coin_bundle_id;
         $createOrder->product_type = 'coins';
         $createOrder->price = $coinData->price;
@@ -133,7 +138,7 @@ class StripeController extends Controller
             case 'checkout.session.completed':
                 
                 $pending_order = UserOrders::where([
-                    'order_id' => $session->id,
+                    'session_id' => $session->id,
                     'status' => 'open'
                 ])->first();
                 if ($pending_order != null) {
@@ -156,7 +161,7 @@ class StripeController extends Controller
                 break;
             case 'checkout.session.expired':
                 $pending_order = UserOrders::where([
-                    'order_id' => $session->id,
+                    'session_id' => $session->id,
                 ])->delete();
                 Log::info($session);
                 break;
@@ -166,5 +171,12 @@ class StripeController extends Controller
             default:
                 return 'Received unknown event type ' . $event->type;
         }
+    }
+    public function FetchOrder(Request $request)
+    {
+        $pending_order = UserOrders::where([
+            'session_id' => $request->id,
+        ])->get();
+        return $pending_order;
     }
 }

@@ -17,6 +17,7 @@ return new class extends Migration
            
             $table->string('product_id')->nullable();
             $table->enum('product_type',['coins','subscription']);
+            $table->string('session_id')->nullable();
             $table->string('order_id');
             $table->string('price');
             $table->string('description')->nullable();

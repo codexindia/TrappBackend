@@ -178,6 +178,16 @@ class StripeController extends Controller
         $pending_order = UserOrders::where([
             'order_id' => $request->id,
         ])->select('id', 'product_type', 'order_id', 'price','description','status')->first();
-        return $pending_order;
+        if($pending_order != null)
+        return response()->json([
+            'status' => true,
+            'data' => $pending_order,
+            'message' => 'Order Fetched SuccessFully'
+        ]);
+        else
+        return response()->json([
+            'status' => false,
+            'message' => 'Invalid Order ID Or Order Trashed'
+        ]);
     }
 }

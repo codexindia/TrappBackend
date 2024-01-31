@@ -11,6 +11,7 @@ use App\Models\UserOrders;
 
 class StripeController extends Controller
 {
+    public $redirect_url = 'https://trapp-sigma.vercel.app/orderStatus';
     private $stripe;
     public function __construct()
     {
@@ -22,7 +23,7 @@ class StripeController extends Controller
            $order_id = "TRP".time();
 
         $payment_init = $this->stripe->checkout->sessions->create([
-            'success_url' => 'https://example.com/success',
+            'success_url' => $this->redirect_url.'/'.$order_id,
             'line_items' => [
                 [
                     'price' => 'price_1Odd84EWrX6kyCsNluSkvWKA',
@@ -67,7 +68,7 @@ class StripeController extends Controller
         ]);
         $order_id = "TRP".time();
 
-        $order_id = 'TRP' . time();
+        
         $coinData = CoinBundle::find($request->coin_bundle_id);
         $price_id = $this->stripe->prices->create([
             'currency' => 'usd',
@@ -77,7 +78,7 @@ class StripeController extends Controller
         $payment_init = $this->stripe->checkout->sessions->create([
 
        
-            'success_url' => 'https://example.com/success',
+            'success_url' => $this->redirect_url.'/'.$order_id,
             'line_items' => [
                 [
                     'price' => $price_id,
@@ -175,8 +176,8 @@ class StripeController extends Controller
     public function FetchOrder(Request $request)
     {
         $pending_order = UserOrders::where([
-            'session_id' => $request->id,
-        ])->get();
+            'order_id' => $request->id,
+        ])->select('id', 'product_type', 'order_id', 'price','description','status')->first();
         return $pending_order;
     }
 }

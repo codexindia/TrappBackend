@@ -234,7 +234,7 @@ class VideoManagement extends Controller
             ]);
             $like_count = VideoAnalytics::where([
                 'action' => 'like',
-            ])->whereJsonContains('attribute', ['video_id' => $static->id])->count();
+            ])->whereJsonContains('attribute', ['video_id' => $request->vid_id])->count();
            
             $response = json_decode($response);
             return response()->json([

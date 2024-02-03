@@ -20,10 +20,10 @@ class StripeController extends Controller
     public function CallSubsCription(Request $request)
     {
 
-           $order_id = "TRP".time();
+        $order_id = "TRP" . time();
 
         $payment_init = $this->stripe->checkout->sessions->create([
-            'success_url' => $this->redirect_url.'/'.$order_id,
+            'success_url' => $this->redirect_url . '/' . $order_id,
             'line_items' => [
                 [
                     'price' => 'price_1Odd84EWrX6kyCsNluSkvWKA',
@@ -39,7 +39,7 @@ class StripeController extends Controller
         $createOrder->order_id = $order_id;
         $createOrder->product_id = $request->coin_bundle_id;
         $createOrder->product_type = 'subscription';
-        $createOrder->price = $price->unit_amount/ 100;
+        $createOrder->price = $price->unit_amount / 100;
         $createOrder->description = env('APP_NAME') . ' Subscription 1 Month';
         $createOrder->type = 'subscription';
         $createOrder->status = 'open';
@@ -66,9 +66,9 @@ class StripeController extends Controller
         $request->validate([
             'coin_bundle_id' => 'required|exists:coin_bundles,id',
         ]);
-        $order_id = "TRP".time();
+        $order_id = "TRP" . time();
 
-        
+
         $coinData = CoinBundle::find($request->coin_bundle_id);
         $price_id = $this->stripe->prices->create([
             'currency' => 'usd',
@@ -77,8 +77,8 @@ class StripeController extends Controller
         ])->id;
         $payment_init = $this->stripe->checkout->sessions->create([
 
-       
-            'success_url' => $this->redirect_url.'/'.$order_id,
+
+            'success_url' => $this->redirect_url . '/' . $order_id,
             'line_items' => [
                 [
                     'price' => $price_id,
@@ -135,9 +135,9 @@ class StripeController extends Controller
         $session = $event->data->object;
         // Handle the event
         switch ($event->type) {
-           
+
             case 'checkout.session.completed':
-                
+
                 $pending_order = UserOrders::where([
                     'session_id' => $session->id,
                     'status' => 'open'
@@ -154,9 +154,9 @@ class StripeController extends Controller
 
                     if ($pending_order->product_type == "coins") {
                         $coin = CoinBundle::find($pending_order->product_id);
-                        User::find($pending_order->user_id)->increment('coins', $coin->coins);
+                        credit_coin($pending_order->user_id, $coin->coins, "Coin Topup Through Online Gateway");
                     } elseif ($pending_order->product_type == "subscription") {
-                        subscription_apply($pending_order->user_id,$session->subscription);
+                        subscription_apply($pending_order->user_id, $session->subscription);
                     }
                 }
                 break;
@@ -166,9 +166,9 @@ class StripeController extends Controller
                 ])->delete();
                 Log::info($session);
                 break;
-                case 'customer.subscription.deleted':
-                    remove_subscription($session->id);
-                   
+            case 'customer.subscription.deleted':
+                remove_subscription($session->id);
+
             default:
                 return 'Received unknown event type ' . $event->type;
         }
@@ -177,17 +177,17 @@ class StripeController extends Controller
     {
         $pending_order = UserOrders::where([
             'order_id' => $request->id,
-        ])->select('id', 'product_type', 'order_id', 'price','description','status')->first();
-        if($pending_order != null)
-        return response()->json([
-            'status' => true,
-            'data' => $pending_order,
-            'message' => 'Order Fetched SuccessFully'
-        ]);
+        ])->select('id', 'product_type', 'order_id', 'price', 'description', 'status')->first();
+        if ($pending_order != null)
+            return response()->json([
+                'status' => true,
+                'data' => $pending_order,
+                'message' => 'Order Fetched SuccessFully'
+            ]);
         else
-        return response()->json([
-            'status' => false,
-            'message' => 'Invalid Order ID Or Order Trashed'
-        ]);
+            return response()->json([
+                'status' => false,
+                'message' => 'Invalid Order ID Or Order Trashed'
+            ]);
     }
 }

@@ -1,35 +1,60 @@
 <?php
 
+use App\Models\CoinTransaction;
 use App\Models\VideoAnalytics;
 use App\Models\User;
 use App\Models\Subscriptions;
 use Carbon\Carbon;
 
+
+
+
+
+if (!function_exists('debit_coin')) {
+    function credit_coin(int $user_id, $coins, $desc = null, $user_type = 'user')
+    {
+        $result = new CoinTransaction;
+        $result->reference_id = 'TRP' . time();
+        $result->user_id = $user_id;
+        $result->user_type = $user_type;
+        $result->coins = $coins;
+        $result->description = $desc;
+        $result->transaction_type = "credit";
+        if ($result->save()) {
+            if (User::find($user_id)->increment('coins', $coins)) {
+                return 1;
+            }
+        } else {
+            return 0;
+        }
+    }
+}
+
+
+
 if (!function_exists('subscription_apply')) {
 
-    function subscription_apply($user_id,$sub_id = null)
+    function subscription_apply($user_id, $sub_id = null)
     {
-        $check_exists = Subscriptions::where('user_id',$user_id)->latest()->first();
-        if($check_exists != null)
-        {
+        $check_exists = Subscriptions::where('user_id', $user_id)->latest()->first();
+        if ($check_exists != null) {
             $start_time = Carbon::parse($check_exists->expired_at);
             $end_time = Carbon::parse($check_exists->expired_at)->addMonth();
             $result = Subscriptions::create(
                 [
-                    'user_id' => $user_id,'start_at' => $start_time,
-                     'expired_at' => $end_time,'status' => 'active',
-                     'subscription_id' => $sub_id
+                    'user_id' => $user_id, 'start_at' => $start_time,
+                    'expired_at' => $end_time, 'status' => 'active',
+                    'subscription_id' => $sub_id
                 ]
             );
-            
-        }else{
+        } else {
             $start_time = Carbon::now();
             $end_time = Carbon::now()->addMonth();
             $result = Subscriptions::create(
-                ['user_id' => $user_id,'start_at' => $start_time, 'expired_at' => $end_time,'status' => 'active','subscription_id' => $sub_id]
+                ['user_id' => $user_id, 'start_at' => $start_time, 'expired_at' => $end_time, 'status' => 'active', 'subscription_id' => $sub_id]
             );
         }
-        
+
         if ($result) {
             return true;
         } else {
@@ -42,13 +67,13 @@ if (!function_exists('remove_subscription')) {
     function remove_subscription($sub_id = null)
     {
         $result = Subscriptions::where([
-          'subscription_id' => $sub_id,
+            'subscription_id' => $sub_id,
         ])->update([
             'status' => 'expired',
             'expired_at' => Carbon::now()
         ]);
-        if($result)
-        return 1;
+        if ($result)
+            return 1;
     }
 }
 

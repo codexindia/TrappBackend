@@ -33,6 +33,10 @@ class User extends Authenticatable
     {
         return $this->hasOne(UserBand::class, 'user_id', 'id');
     }
+    public function UserSubcription()
+    {
+        return $this->hasOne(Subscriptions::class, 'user_id', 'id');
+    }
     public function getProfilePicAttribute($value)
     {
         if(!$value == null)

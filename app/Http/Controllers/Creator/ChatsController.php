@@ -39,7 +39,7 @@ class ChatsController extends Controller
         $request->validate([
             'video_id' => 'required',
         ]);
-        $data = Message::where('video_id', $request->video_id)->limit(200)->orderBy('id', 'desc')->get(['id', 'type','name', 'avatar', 'message', 'created_at']);
+        $data = Message::where('video_id', $request->video_id)->limit(200)->orderBy('id', 'desc')->get();
         return response()->json([
             'status' => true,
             'data' => $data

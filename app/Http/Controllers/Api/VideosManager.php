@@ -126,13 +126,9 @@ class VideosManager extends Controller
             ]);
         }
     }
-    public function webhook(Request $request)
+    public function webhook(Request $data)
     {
-        $data = array(
-            'type' => 'live-stream.broadcast.ended',
-            'emittedAt' => '2024-02-03T14:51:01.778659701Z',
-            'liveStreamId' => 'li1gY8q707iDp9r77i4R6i0w',
-        );
+        
         switch ($data['type']) {
             case 'live-stream.broadcast.started':
                 $update = UploadedVideos::whereJsonContains('live_api_data', ['liveStreamId' => $data['liveStreamId']])->first();

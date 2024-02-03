@@ -44,11 +44,6 @@ class VideosManager extends Controller
         $data = UploadedVideos::with('Creator:id,channel_name,channel_logo,first_name,last_name')->where('id', $video_id)->first();
         UploadedVideos::find($request->video_id)->increment('views', 1);
         $data->creator->makeHidden(['email', 'created_at', 'updated_at', 'contact_address', 'first_name', 'last_name', 'phone_number']);
-       if($data->video_type == "live"){
-       
-        $live_api = json_decode($data->live_api_data);
-        $data['video_loc'] = $live_api->assets->hls;
-       }
     
         $data['like'] = 0;
         $data['dislike'] = 0;
@@ -82,7 +77,11 @@ class VideosManager extends Controller
         $data['like_count'] = $query;
 
 
-
+        if($data->video_type == "live"){
+       
+            $live_api = json_decode($data->live_api_data);
+            $data['video_loc'] = $live_api->assets->hls;
+           }
         return response()->json([
             'status' => true,
             'data' => $data

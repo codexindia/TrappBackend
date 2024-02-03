@@ -33,6 +33,9 @@ if (!function_exists('credit_coin')) {
 if (!function_exists('debit_coin')) {
     function debit_coin(int $user_id, $coins, $desc = null, $user_type = 'user')
     {
+        if(!User::find($user_id)->coins >= $coins){
+            return "You Don't Have Enough Coins";
+        }
         $result = new CoinTransaction;
         $result->reference_id = 'TRP' . time();
         $result->user_id = $user_id;

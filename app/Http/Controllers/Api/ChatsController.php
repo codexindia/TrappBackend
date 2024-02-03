@@ -45,8 +45,8 @@ class ChatsController extends Controller
         ]);
 
         $message = [
-            "created_at" => Carbon::now(),
-            "id" => $request->user()->id,
+          
+            "user_id" => $request->user()->id,
             "name" => $request->user()->name,
             "message_type" => 'plain_text',
             "message" => $request->message,
@@ -54,16 +54,9 @@ class ChatsController extends Controller
             "avatar" => $request->user()->profile_pic,
             "video_id" => $request->video_id,
         ];
-        Message::create([
-            "user_id" => $request->user()->id,
-            "name" => $request->user()->name,
-            "message" => $request->message,
-            "type" => "user",
-            "avatar" => $request->user()->profile_pic,
-            "video_id" => $request->video_id,
-        ]);
+        $result = Message::create($message);
 
-        event(new \App\Events\MessageSent($message));
+        event(new \App\Events\MessageSent($result));
         return response()->json([
             'status' => true,
         ]);

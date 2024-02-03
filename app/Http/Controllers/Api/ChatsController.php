@@ -11,9 +11,32 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Pusher\Pusher;
+use App\Models\StickersList;
 
 class ChatsController extends Controller
 {
+    public function SendSticker(Request $request)
+    {
+        $request->validate([
+            'sticker_id' => 'required|exists:stickers_lists,id',
+            'video_id' => 'required|exists:uploaded_videos,id'
+        ]);
+        $sticker = StickersList::find($request->sticker_id);
+        $message = [
+            "user_id" => $request->user()->id,
+            "name" => $request->user()->name,
+            "message_type" => 'stickers',
+            "type" => "user",
+            "avatar" => $request->user()->profile_pic,
+            "video_id" => $request->video_id,
+            "sticker" =>  $sticker->sticker_src,
+        ];
+        Message::create($message);
+        event(new \App\Events\MessageSent($message));
+        return response()->json([
+            'status' => true,
+        ]);
+    }
     public function sendMessage(Request $request)
     {
         $request->validate([
@@ -49,7 +72,7 @@ class ChatsController extends Controller
         $request->validate([
             'video_id' => 'required',
         ]);
-        $data = Message::where('video_id', $request->video_id)->limit(200)->orderBy('id', 'desc')->get(['id','type','name', 'avatar', 'message', 'created_at']);
+        $data = Message::where('video_id', $request->video_id)->limit(200)->orderBy('id', 'desc')->get(['id', 'type', 'name', 'avatar', 'message', 'created_at']);
         return response()->json([
             'status' => true,
             'data' => $data

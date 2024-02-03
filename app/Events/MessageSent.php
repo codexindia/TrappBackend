@@ -47,7 +47,9 @@ class MessageSent implements ShouldBroadcast
     {
         if ($this->type == 'creator') {
             return 'CreMessageSent';
-        } else {
+        } if ($this->message->message_type == 'stickers') {
+            return 'StickerSent';
+        }else {
             return 'MessageSent';
         }
     }

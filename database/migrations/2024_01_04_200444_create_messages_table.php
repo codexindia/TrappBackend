@@ -19,7 +19,9 @@ return new class extends Migration
             $table->enum('type',['user','creator']);
             $table->text('name');
             $table->text('avatar')->nullable();
-            $table->text('message');
+            $table->text('message')->nullable();
+            $table->enum('message_type',['plain_text','stickers'])->default('plain_text');
+            $table->string('sticker')->nullable();
             $table->timestamps();
         });
     }

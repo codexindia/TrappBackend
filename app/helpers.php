@@ -10,7 +10,7 @@ use Carbon\Carbon;
 
 
 
-if (!function_exists('debit_coin')) {
+if (!function_exists('credit_coin')) {
     function credit_coin(int $user_id, $coins, $desc = null, $user_type = 'user')
     {
         $result = new CoinTransaction;
@@ -30,7 +30,25 @@ if (!function_exists('debit_coin')) {
     }
 }
 
-
+if (!function_exists('debit_coin')) {
+    function debit_coin(int $user_id, $coins, $desc = null, $user_type = 'user')
+    {
+        $result = new CoinTransaction;
+        $result->reference_id = 'TRP' . time();
+        $result->user_id = $user_id;
+        $result->user_type = $user_type;
+        $result->coins = $coins;
+        $result->description = $desc;
+        $result->transaction_type = "debit";
+        if ($result->save()) {
+            if (User::find($user_id)->decrement('coins', $coins)) {
+                return 1;
+            }
+        } else {
+            return 0;
+        }
+    }
+}
 
 if (!function_exists('subscription_apply')) {
 

@@ -33,7 +33,7 @@ class User extends Authenticatable
     {
         return $this->hasOne(UserBand::class, 'user_id', 'id');
     }
-    public function UserSubcription()
+    public function Subscription()
     {
         return $this->hasOne(Subscriptions::class, 'user_id', 'id');
     }

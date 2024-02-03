@@ -37,7 +37,7 @@ class ChatsController extends Controller
         if(!$status){
             return response()->json([
                 'status' => false,
-                'message' => $status,
+                'message' => "You Don't Have Enough Coins",
             ]); 
         }
         $result = Message::create($message);

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Creator;
 
 use App\Http\Controllers\Controller;
+use App\Models\VideoAnalytics;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
@@ -221,6 +222,7 @@ class VideoManagement extends Controller
             'vid_id' => 'required|exists:uploaded_videos,id'
         ]);
         $data = UploadedVideos::find($request->vid_id);
+        $static = $data;
         if ($data->video_type != 'live') {
             return "video not live video";
         }
@@ -230,6 +232,10 @@ class VideoManagement extends Controller
             $data->update([
                 'live_api_data' => $response
             ]);
+            $like_count = VideoAnalytics::where([
+                'action' => 'like',
+            ])->whereJsonContains('attribute', ['video_id' => $static->id])->count();
+           
             $response = json_decode($response);
             return response()->json([
                 'status' => true,
@@ -241,8 +247,8 @@ class VideoManagement extends Controller
                     'hls_player' => $response->assets->hls,
                 ),
                 'statics' => array(
-                    'likes' => 0,
-                    'views' => 0,
+                    'likes' => $like_count,
+                    'views' => $static->views,
                    
                 )
             ]);

@@ -131,7 +131,7 @@ class VideosManager extends Controller
         
         switch ($data['type']) {
             case 'live-stream.broadcast.started':
-                $update = UploadedVideos::whereJsonContains('live_api_data', ['liveStreamId' => $data['liveStreamId']])->first();
+                $update = UploadedVideos::where('video_type','live')->whereJsonContains('live_api_data', ['liveStreamId' => $data['liveStreamId']])->first();
                 if ($update != null) {
                     $update->update([
                         'privacy' => 'public',
@@ -140,7 +140,7 @@ class VideosManager extends Controller
                 Log::info($update);
                 break;
             case 'live-stream.broadcast.ended':
-                $update = UploadedVideos::whereJsonContains('live_api_data', ['liveStreamId' => $data['liveStreamId']])->first();
+                $update = UploadedVideos::where('video_type','live')->whereJsonContains('live_api_data', ['liveStreamId' => $data['liveStreamId']])->first();
                 if ($update != null) {
                     $update->update([
                         'privacy' => 'private',

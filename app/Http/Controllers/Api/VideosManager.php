@@ -142,7 +142,7 @@ class VideosManager extends Controller
                         'privacy' => 'public',
                     ]);
                 }
-                Log::info($update);
+               
                 break;
             case 'live-stream.broadcast.ended':
                 $update = UploadedVideos::where('video_type','live')->whereJsonContains('live_api_data', ['liveStreamId' => $data['liveStreamId']])->first();
@@ -151,7 +151,7 @@ class VideosManager extends Controller
                         'privacy' => 'private',
                     ]);
                 }
-                Log::info($update);
+               
                 break;
             default:
                 return 'Received unknown event type ' . $data['type'];

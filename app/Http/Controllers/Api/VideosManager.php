@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
+use ApiVideo\Client\Client;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use Http\Discovery\Psr18Client;
 use Illuminate\Http\Request;
 use App\Models\UploadedVideos;
 use App\Models\VideoAnalytics;
+use Illuminate\Support\Facades\Log;
 
 class VideosManager extends Controller
 {
@@ -117,5 +120,9 @@ class VideosManager extends Controller
                 'message' => 'Video dislike Removed',
             ]);
         }
+    }
+    public function webhook(Request $request)
+    {
+        Log::info($request);
     }
 }

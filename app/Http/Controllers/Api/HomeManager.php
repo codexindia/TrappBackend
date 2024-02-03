@@ -16,7 +16,7 @@ class HomeManager extends Controller
         $live_video = UploadedVideos::where([
             'video_type' => 'live',
             'privacy' => 'public'
-            ])->with('Creator:creator_id,channel_logo')->inRandomOrder()->limit(10)->get(['id']);
+            ])->with('Creator:id,channel_name,channel_logo')->inRandomOrder()->limit(10)->get(['id']);
         $data = array(
             'normal_video' => $normal_video,
             'live_video' => $live_video

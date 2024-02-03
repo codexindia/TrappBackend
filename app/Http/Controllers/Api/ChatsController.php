@@ -32,6 +32,7 @@ class ChatsController extends Controller
             "sticker" =>  $sticker->sticker_src,
         ];
         $result = Message::create($message);
+        debit_coin($message['user_id'], $sticker->coins, "For Sending Gift Or Stickers To Creator");
         event(new \App\Events\MessageSent($result));
         return response()->json([
             'status' => true,
@@ -45,7 +46,6 @@ class ChatsController extends Controller
         ]);
 
         $message = [
-          
             "user_id" => $request->user()->id,
             "name" => $request->user()->name,
             "message_type" => 'plain_text',

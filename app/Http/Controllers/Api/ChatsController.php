@@ -31,8 +31,8 @@ class ChatsController extends Controller
             "video_id" => $request->video_id,
             "sticker" =>  $sticker->sticker_src,
         ];
-        Message::create($message);
-        event(new \App\Events\MessageSent($message));
+        $result = Message::create($message);
+        event(new \App\Events\MessageSent($result));
         return response()->json([
             'status' => true,
         ]);
@@ -48,6 +48,7 @@ class ChatsController extends Controller
             "created_at" => Carbon::now(),
             "id" => $request->user()->id,
             "name" => $request->user()->name,
+            "message_type" => 'plain_text',
             "message" => $request->message,
             "type" => "user",
             "avatar" => $request->user()->profile_pic,

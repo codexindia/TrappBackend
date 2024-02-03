@@ -159,7 +159,7 @@ class VideoManagement extends Controller
     public function create_live(Request $request)
     {
 
-       
+
         $request->validate([
             'title' => 'required|min:6|max:50',
             'description' => 'min:6|max:5000',
@@ -176,7 +176,7 @@ class VideoManagement extends Controller
                     'title' => $request->title,
                     'description' => $request->description,
                     'creator_id' => $request->user()->id,
-                    'privacy' => $request->privacy,
+                    'privacy' => 'private',
                     'video_type' => 'live',
                     'live_api_data' => $response,
 
@@ -197,10 +197,10 @@ class VideoManagement extends Controller
                 $update_values['video_loc'] = $response->assets->hls;
                 $result = UploadedVideos::create($update_values);
                 $thumbnail = Http::withBasicAuth(env('VIDEO_API'), 'username')->attach(
-                        'file',
-                        $request->file('thumbnail'),
-                        'photo.jpg'
-                    )->post('https://' . $this->baseurl . '/live-streams/' . $response->liveStreamId . '/thumbnail');
+                    'file',
+                    $request->file('thumbnail'),
+                    'photo.jpg'
+                )->post('https://' . $this->baseurl . '/live-streams/' . $response->liveStreamId . '/thumbnail');
             }
             return response()->json([
                 'status' => true,
@@ -235,7 +235,7 @@ class VideoManagement extends Controller
             $like_count = VideoAnalytics::where([
                 'action' => 'like',
             ])->whereJsonContains('attribute', ['video_id' => $request->vid_id])->count();
-           
+
             $response = json_decode($response);
             return response()->json([
                 'status' => true,
@@ -249,7 +249,7 @@ class VideoManagement extends Controller
                 'statics' => array(
                     'likes' => $like_count,
                     'views' => $static->views,
-                   
+
                 )
             ]);
         }

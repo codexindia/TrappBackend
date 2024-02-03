@@ -168,7 +168,7 @@ class StripeController extends Controller
                 break;
             case 'customer.subscription.deleted':
                 remove_subscription($session->id);
-
+                break;
             default:
                 return 'Received unknown event type ' . $event->type;
         }

@@ -27,7 +27,7 @@ class VideosManager extends Controller
         $request->validate([
             'cat_id' => 'required',
         ]);
-        $data = UploadedVideos::where('cat_id',$request->cat_id)->orderBy('id', 'desc')->paginate(10);
+        $data = UploadedVideos::where('cat_id', $request->cat_id)->orderBy('id', 'desc')->paginate(10);
         return response()->json([
             'status' => true,
             'data' => $data,
@@ -44,7 +44,7 @@ class VideosManager extends Controller
         $data = UploadedVideos::with('Creator:id,channel_name,channel_logo,first_name,last_name')->where('id', $video_id)->first();
         UploadedVideos::find($request->video_id)->increment('views', 1);
         $data->creator->makeHidden(['email', 'created_at', 'updated_at', 'contact_address', 'first_name', 'last_name', 'phone_number']);
-    
+
         $data['like'] = 0;
         $data['dislike'] = 0;
         $data['followed'] = 0;
@@ -77,11 +77,11 @@ class VideosManager extends Controller
         $data['like_count'] = $query;
 
 
-        if($data->video_type == "live"){
-       
+        if ($data->video_type == "live") {
+
             $live_api = json_decode($data->live_api_data);
             $data['hls_link'] = $live_api->assets->hls;
-           }
+        }
         return response()->json([
             'status' => true,
             'data' => $data
@@ -128,6 +128,33 @@ class VideosManager extends Controller
     }
     public function webhook(Request $request)
     {
-        Log::info($request);
+        $data = array(
+            'type' => 'live-stream.broadcast.ended',
+            'emittedAt' => '2024-02-03T14:51:01.778659701Z',
+            'liveStreamId' => 'li1gY8q707iDp9r77i4R6i0w',
+        );
+        switch ($data['type']) {
+            case 'live-stream.broadcast.started':
+                $update = UploadedVideos::whereJsonContains('live_api_data', ['liveStreamId' => $data['liveStreamId']])->first();
+                if ($update != null) {
+                    $update->update([
+                        'privacy' => 'public',
+                    ]);
+                }
+                Log::info($update);
+                break;
+            case 'live-stream.broadcast.ended':
+                $update = UploadedVideos::whereJsonContains('live_api_data', ['liveStreamId' => $data['liveStreamId']])->first();
+                if ($update != null) {
+                    $update->update([
+                        'privacy' => 'private',
+                    ]);
+                }
+                Log::info($update);
+                break;
+            default:
+                return 'Received unknown event type ' . $data['type'];
+               
+        }
     }
 }

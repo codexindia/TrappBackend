@@ -45,9 +45,9 @@ class VideosManager extends Controller
         UploadedVideos::find($request->video_id)->increment('views', 1);
         $data->creator->makeHidden(['email', 'created_at', 'updated_at', 'contact_address', 'first_name', 'last_name', 'phone_number']);
        if($data->video_type == "live"){
-        return "hello";
+       
         $live_api = json_decode($data->live_api_data);
-        $data['video_loc'] = $live_api->assets->hls;
+        $data['video_loc2'] = $live_api->assets->hls;
        }
     
         $data['like'] = 0;

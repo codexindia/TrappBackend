@@ -95,4 +95,13 @@ class VideoManagement extends Controller
             'message' => 'cat updated'
         ]);
     }
+    public function cat_delete(Request $request)
+    {
+        Category::find($request->cat_id)->delete();
+        return response()->json([
+            'status' => true,
+
+            'message' => 'cat Deleted'
+        ]);
+    }
 }

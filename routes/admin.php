@@ -38,6 +38,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('create_cat', 'create_cat');
         Route::post('cat_list', 'cat_list');
         Route::post('cat_edit', 'cat_edit');
+        Route::post('cat_delete', 'cat_delete');
     });
     Route::controller('StickersManagement')->prefix('sticker')->group(function () {
         Route::post('create', 'create_new');

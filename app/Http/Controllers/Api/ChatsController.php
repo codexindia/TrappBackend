@@ -21,7 +21,9 @@ class ChatsController extends Controller
             'sticker_id' => 'required|exists:stickers_lists,id',
             'video_id' => 'required|exists:uploaded_videos,id'
         ]);
+        
         $sticker = StickersList::find($request->sticker_id);
+        
         $message = [
             "user_id" => $request->user()->id,
             "name" => $request->user()->name,
@@ -31,8 +33,15 @@ class ChatsController extends Controller
             "video_id" => $request->video_id,
             "sticker" =>  $sticker->sticker_src,
         ];
+        $status = debit_coin($message['user_id'], $sticker->price, "For Sending Gift Or Stickers To Creator");
+        if(!$status){
+            return response()->json([
+                'status' => false,
+                'message' => $status,
+            ]); 
+        }
         $result = Message::create($message);
-        debit_coin($message['user_id'], $sticker->price, "For Sending Gift Or Stickers To Creator");
+        
         event(new \App\Events\MessageSent($result));
         return response()->json([
             'status' => true,

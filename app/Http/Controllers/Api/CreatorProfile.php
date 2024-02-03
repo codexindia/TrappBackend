@@ -34,7 +34,7 @@ class CreatorProfile extends Controller
         $data['follow_counts'] = follow_count($request->cre_id);
         $data['videos_counts'] = $vList->count();
         $data['playlist_count'] = 0;
-        $data['videosOrLives'] =  $vList->paginate(2);
+        $data['videosOrLives'] =  $vList->paginate(20);
         return response()->json([
             'status' => true,
             'data' => $data,

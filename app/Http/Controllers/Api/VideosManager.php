@@ -47,7 +47,7 @@ class VideosManager extends Controller
        if($data->video_type == "live"){
        
         $live_api = json_decode($data->live_api_data);
-        $data['video_loc2'] = $live_api->assets->hls;
+        $data['video_loc'] = $live_api->assets->hls;
        }
     
         $data['like'] = 0;

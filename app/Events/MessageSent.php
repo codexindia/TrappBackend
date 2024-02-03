@@ -20,13 +20,13 @@ class MessageSent implements ShouldBroadcast
 
     public $message;
     public $video_id;
-    public $type;
+
     /**
      * Create a new event instance.
      */
-    public function __construct($message, $type = 'user')
+    public function __construct($message,)
     {
-        $this->type = $type;
+        
         $this->message = $message;
         $this->video_id = $message['video_id'];
     }
@@ -45,7 +45,7 @@ class MessageSent implements ShouldBroadcast
 
     public function broadcastAs()
     {
-        if ($this->type == 'creator') {
+        if ($this->message['type'] == 'creator') {
             return 'CreMessageSent';
         } if ($this->message['message_type'] == 'stickers') {
             return 'StickerSent';

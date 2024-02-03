@@ -13,7 +13,7 @@ class UserManagement extends Controller
     {
 
         if ($request->query_data == "all") {
-            $users = User::with('UserBlocked:reason')
+            $users = User::with('UserBlocked:id,user_id,reason')
             ->orderBy('id', 'desc')->paginate(10);
            
         } else {

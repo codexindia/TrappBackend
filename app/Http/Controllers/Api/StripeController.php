@@ -198,9 +198,7 @@ class StripeController extends Controller
             'status' => 'active'
             ])->latest()->first();
         if ($check_sub != null) {
-            $check_sub->update([
-                'status' => 'expired'
-            ]);
+          
             if ($this->stripe->subscriptions->cancel($check_sub->subscription_id, []))
                 return response()->json([
                     'status' => true,

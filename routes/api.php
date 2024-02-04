@@ -58,6 +58,7 @@ Route::middleware(['auth:sanctum','user.check'])->group(function () {
     Route::controller('StripeController')->prefix('payment')->group(function () {
         Route::post('/CallSubscription','CallSubsCription');
         Route::post('/CheckSubscription','CheckSubscription');
+        Route::post('/CancelSubscription','CancelSubscription');
         Route::post('/BuyCoins','BuyCoins');
         Route::get('/FetchOrder/{id}','FetchOrder');
     

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Subscriptions;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\CoinBundle;
@@ -190,5 +191,18 @@ class StripeController extends Controller
                 'message' => 'Invalid Order ID Or Order Trashed'
             ]);
     }
-    
+    public function CancelSubscription(Request $request)
+    {
+        $check_sub = Subscriptions::where('user_id', $request->user()->id)->latest()->first();
+        if($this->stripe->subscriptions->cancel($check_sub->subscription_id, []))
+        return response()->json([
+            'status' => true,
+            'message' => 'Subscription Has Been Canceled'
+        ]);
+        return response()->json([
+            'status' => false,
+            'message' => 'Something West Wrong'
+        ]);
+   
+    }
 }

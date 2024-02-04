@@ -22,9 +22,9 @@ class WalletManager extends Controller
        $data = CoinTransaction::where([
             'user_type' => 'user',
             'user_id' => $request->user()->id
-        ])->orderBy('id','desc')->select([
+        ])->orderBy('id','desc')->select(
             'reference_id','coins','transaction_type','description','created_at'
-        ])->paginate(5);
+        )->paginate(5);
         return response()->json([
           'status' => true,
           'data' => $data

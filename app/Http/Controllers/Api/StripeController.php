@@ -193,8 +193,14 @@ class StripeController extends Controller
     }
     public function CancelSubscription(Request $request)
     {
-        $check_sub = Subscriptions::where('user_id', $request->user()->id)->latest()->first();
+        $check_sub = Subscriptions::where([
+            'user_id' => $request->user()->id,
+            'status' => 'active'
+            ])->latest()->first();
         if ($check_sub != null) {
+            $check_sub->update([
+                'status' => 'expired'
+            ]);
             if ($this->stripe->subscriptions->cancel($check_sub->subscription_id, []))
                 return response()->json([
                     'status' => true,

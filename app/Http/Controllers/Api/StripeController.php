@@ -55,7 +55,7 @@ class StripeController extends Controller
         $request->validate([
             'sub_id' => 'required',
         ]);
-
+           
         return $this->stripe->subscriptions->retrieve($request->sub_id, [])->status;
     }
     public function BuyCoins(Request $request)
@@ -189,5 +189,9 @@ class StripeController extends Controller
                 'status' => false,
                 'message' => 'Invalid Order ID Or Order Trashed'
             ]);
+    }
+    public function TransactionFetch(Request $request)
+    {
+        
     }
 }

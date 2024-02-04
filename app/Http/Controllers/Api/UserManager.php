@@ -25,12 +25,21 @@ class UserManager extends Controller
             $check_sub = "expired";
         else
 
-            $check_sub = Carbon::now()->isAfter($check_sub->expired_at) != true ? "active" : "expired";
-        return response()->json([
+            $check_sub = Carbon::now()->isAfter($check_sub->expired_at) != true ? array(
+                'status' => 'active',
+                'start_at' =>  $check_sub->start_at,
+                'end_at' =>  $check_sub->expired_at
+            ) :array(
+                'status' => 'expired',
+                'start_at' =>  $check_sub->start_at,
+                'end_at' =>  $check_sub->expired_at
+            ) ;
+      
+            return response()->json([
             'status' => true,
             'data' => $request->user(),
             'subscription_status' => $check_sub,
-            'message' => 'User Retrived',
+            'message' => 'User Retreive',
         ]);
     }
     public function update_user(Request $request)

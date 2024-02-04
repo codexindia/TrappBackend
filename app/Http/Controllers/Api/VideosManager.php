@@ -132,10 +132,6 @@ class VideosManager extends Controller
        if($data->ip() != "45.67.210.122"){
         return "invalid Request";
        }
-
-
-
-        
         switch ($data['type']) {
             case 'live-stream.broadcast.started':
                 $update = UploadedVideos::where('video_type','live')->whereJsonContains('live_api_data', ['liveStreamId' => $data['liveStreamId']])->first();

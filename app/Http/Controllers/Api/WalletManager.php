@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\CoinBundle;
-
+use App\Models\CoinTransaction;
 class WalletManager extends Controller
 {
     public function GetCoinBundle(Request $request)
@@ -15,6 +15,19 @@ class WalletManager extends Controller
             'status' => true,
             'coins_bundle' => $coins,
             'message' => 'coins reterive done'
+        ]);
+    }
+    public function TransactionFetch(Request $request)
+    {
+       $data = CoinTransaction::where([
+            'user_type' => 'user',
+            'user_id' => $request->user()->id
+        ])->orderBy('id','desc')->get([
+            'reference_id','coins','transaction_type','description','created_at'
+        ]);
+        return response()->json([
+          'status' => true,
+          'data' => $data
         ]);
     }
 }

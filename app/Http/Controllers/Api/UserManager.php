@@ -6,10 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 //use App\Notifications\UserAlert;
 use Illuminate\Http\Request;
-
-use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
-use Spatie\Activitylog\Facades\CauserResolver;
 use App\Models\Subscriptions;
 use Carbon\Carbon;
 

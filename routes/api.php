@@ -60,7 +60,7 @@ Route::middleware(['auth:sanctum','user.check'])->group(function () {
         Route::post('/CheckSubscription','CheckSubscription');
         Route::post('/BuyCoins','BuyCoins');
         Route::get('/FetchOrder/{id}','FetchOrder');
-        Route::post('/TransactionsFetch','TransactionFetch');
+    
         Route::any('/webhook','webhook')->withoutMiddleware(['auth:sanctum','user.check']);
       });
     Route::controller('ChatsController')->prefix('livechat')->group(function () {
@@ -74,5 +74,6 @@ Route::middleware(['auth:sanctum','user.check'])->group(function () {
       });
       Route::controller('WalletManager')->prefix('wallet')->group(function () {
         Route::post('/GetCoinBundle','GetCoinBundle');
+        Route::post('/TransactionsFetch','TransactionFetch');
       });
 });

@@ -190,8 +190,5 @@ class StripeController extends Controller
                 'message' => 'Invalid Order ID Or Order Trashed'
             ]);
     }
-    public function TransactionFetch(Request $request)
-    {
-        
-    }
+    
 }

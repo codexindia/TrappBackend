@@ -56,7 +56,7 @@ class StripeController extends Controller
         $request->validate([
             'sub_id' => 'required',
         ]);
-           
+
         return $this->stripe->subscriptions->retrieve($request->sub_id, [])->status;
     }
     public function BuyCoins(Request $request)
@@ -194,15 +194,16 @@ class StripeController extends Controller
     public function CancelSubscription(Request $request)
     {
         $check_sub = Subscriptions::where('user_id', $request->user()->id)->latest()->first();
-        if($this->stripe->subscriptions->cancel($check_sub->subscription_id, []))
-        return response()->json([
-            'status' => true,
-            'message' => 'Subscription Has Been Canceled'
-        ]);
+        if ($check_sub != null) {
+            if ($this->stripe->subscriptions->cancel($check_sub->subscription_id, []))
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Subscription Has Been Canceled'
+                ]);
+        }
         return response()->json([
             'status' => false,
             'message' => 'Something West Wrong'
         ]);
-   
     }
 }

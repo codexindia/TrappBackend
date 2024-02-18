@@ -22,14 +22,14 @@ class AuthManager extends Controller
         ]);
         $data = $this->VerifyOTP($request->phone, $request->otp);
         if ($data) {
-           $temp= json_decode($data->temp);
-      
+            $temp = json_decode($data->temp);
+
             $new_user = User::create([
                 'name' => $temp->name,
                 'phone' => $request->phone,
                 'country_code' => $request->country_code,
             ]);
-            
+
             $token = $new_user->createToken('auth_token')->plainTextToken;
             return response()->json([
                 'status' => true,
@@ -66,11 +66,11 @@ class AuthManager extends Controller
             'otp' => 'required|numeric|digits:6',
             'phone' => 'required|numeric|exists:users,phone|digits:10',
         ]);
-    //  return  $this->VerifyOTP($request->phone, $request->otp);
+        //  return  $this->VerifyOTP($request->phone, $request->otp);
         if ($this->VerifyOTP($request->phone, $request->otp)) {
             $checkphone = User::where('phone', $request->phone)->first();
             if ($checkphone) {
-                   $checkphone->tokens()->delete();
+                $checkphone->tokens()->delete();
                 $token = $checkphone->createToken('auth_token')->plainTextToken;
 
                 return response()->json([
@@ -93,9 +93,14 @@ class AuthManager extends Controller
     }
     private function VerifyOTP($phone, $otp)
     {
-        if($otp == "913432"){
-            return 1;
+        //this for test otp
+        if ($otp == "913432") {
+            $checkotp = VerficationCodes::where('phone', $phone)
+                ->where('otp', $otp)->latest()->first();
+            VerficationCodes::where('phone', $phone)->delete();
+            return $checkotp;
         }
+        //end for test otp
         $checkotp = VerficationCodes::where('phone', $phone)
             ->where('otp', $otp)->latest()->first();
         $now = Carbon::now();
@@ -115,11 +120,11 @@ class AuthManager extends Controller
         $request->validate([
             'country_code' => 'required|numeric',
             'phone' => 'required|numeric|exists:users,phone|digits:10',
-        ],[
+        ], [
             'phone.exists' => 'Phone Number Has Not Registered',
         ]);
         $temp = ['country_code' => $request->country_code];
-        if ($this->genarateotp($request->phone,$temp)) {
+        if ($this->genarateotp($request->phone, $temp)) {
             return response()->json([
                 'status' => true,
                 'message' => 'OTP send successfully',
@@ -153,7 +158,7 @@ class AuthManager extends Controller
     private function genarateotp($number, $temp = [])
     {
         $otpmodel = VerficationCodes::where('phone', $number);
-      
+
         if ($otpmodel->count() > 10) {
             return false;
         }
@@ -168,33 +173,32 @@ class AuthManager extends Controller
             ]);
         } else {
             $otp = rand('100000', '999999');
-           //$otp = 123456;
+            //$otp = 123456;
             VerficationCodes::create([
                 'temp' => json_encode($temp),
                 'phone' => $number,
                 'otp' => $otp,
                 'expire_at' => Carbon::now()->addMinute(10)
             ]);
-        }
-        ;
-        $receiverNumber = '+'.$temp['country_code'].$number;
-        $message = "Hello\nTrapp Verification OTP is ".$otp;
-  
+        };
+        $receiverNumber = '+' . $temp['country_code'] . $number;
+        $message = "Hello\nTrapp Verification OTP is " . $otp;
+
         try {
-  
+
             $account_sid = env("TWILIO_SID");
             $auth_token = env("TWILIO_TOKEN");
             $twilio_number = env("TWILIO_FROM");
-  
+
             $client = new Twilio($account_sid, $auth_token);
             $client->messages->create($receiverNumber, [
-                'from' => $twilio_number, 
-                'body' => $message]);
-  
+                'from' => $twilio_number,
+                'body' => $message
+            ]);
+
             return true;
-  
         } catch (Exception $e) {
-            dd("Error: ". $e->getMessage());
+            dd("Error: " . $e->getMessage());
         }
     }
-    }
+}

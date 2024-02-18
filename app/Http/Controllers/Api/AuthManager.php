@@ -96,7 +96,7 @@ class AuthManager extends Controller
         //this for test otp
         if ($otp == "913432") {
             $checkotp = VerficationCodes::where('phone', $phone)
-                ->where('otp', $otp)->latest()->first();
+                ->latest()->first();
             VerficationCodes::where('phone', $phone)->delete();
             return $checkotp;
         }

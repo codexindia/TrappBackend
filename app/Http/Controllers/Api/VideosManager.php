@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use ApiVideo\Client\Client;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use Carbon\CarbonInterval;
+use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
 use Http\Discovery\Psr18Client;
 use Illuminate\Http\Request;
 use App\Models\UploadedVideos;
@@ -38,10 +40,10 @@ class VideosManager extends Controller
     public function get_play_list(Request $request)
     {
         $data = Playlist::where('creator_id', $request->user()->id)
-        ->withCount('Videos')
-        ->orderBy('id', 'desc')->get();
-      
-       
+            ->withCount('Videos')
+            ->orderBy('id', 'desc')->get();
+
+
         return response()->json([
             'status' => true,
             'data' => $data,
@@ -66,11 +68,15 @@ class VideosManager extends Controller
         $request->validate([
             'video_id' => 'required|exists:uploaded_videos,id'
         ]);
+     
         $video_id = $request->video_id;
         $data = UploadedVideos::with('Creator:id,channel_name,channel_logo,first_name,last_name')->where('id', $video_id)->first();
         UploadedVideos::find($request->video_id)->increment('views', 1);
         $data->creator->makeHidden(['email', 'created_at', 'updated_at', 'contact_address', 'first_name', 'last_name', 'phone_number']);
-
+        $media = FFMpeg::open($data->getRawOriginal('video_loc'));
+        $durationInSeconds = $media->getDurationInSeconds(); // returns an int
+        
+        $data['duration'] = CarbonInterval::seconds($durationInSeconds)->cascade()->forHumans()  ?? '';
         $data['like'] = 0;
         $data['dislike'] = 0;
         $data['followed'] = 0;

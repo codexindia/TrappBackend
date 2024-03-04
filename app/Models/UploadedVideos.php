@@ -30,4 +30,5 @@ class UploadedVideos extends Model
     {
         return $this->hasOne(Creator::class, 'id', 'creator_id');
     }
+   
 }

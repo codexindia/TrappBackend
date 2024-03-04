@@ -1,5 +1,6 @@
 <?php
 
+use Carbon\CarbonInterval;
 use FFMpeg\Filters\Video\VideoFilters;
 use FFMpeg\Format\Audio\Aac;
 use Illuminate\Support\Facades\Route;
@@ -19,4 +20,10 @@ use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
 
 Route::get('/', function () {
     return view('welcome');
+});
+Route::get('/get', function () {
+    $media = FFMpeg::open('demo.mkv');
+    $durationInSeconds = $media->getDurationInSeconds(); // returns an int
+    return CarbonInterval::seconds($durationInSeconds)->cascade()->forHumans()  ?? '';
+     
 });

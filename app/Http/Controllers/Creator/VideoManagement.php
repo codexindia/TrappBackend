@@ -44,7 +44,7 @@ class VideoManagement extends Controller
             'creator_id' => $request->user()->id,
             'id' => $request->id,
         ])->first();
-        Storage::delete([$vid->getRawOriginal('video_loc'), $vid->getRawOriginal('thumbnail')]);
+        Storage::delete(['//public/'.$vid->getRawOriginal('video_loc'), '//public/'.$vid->getRawOriginal('thumbnail')]);
         $vid->delete();
         return response()->json([
             'status' => true,
@@ -147,11 +147,12 @@ class VideoManagement extends Controller
                 $durationInSeconds = $media->getDurationInSeconds(); // returns an int
                 $hours = floor($durationInSeconds / 3600);
                 $mins = floor(($durationInSeconds - ($hours * 3600)) / 60);
-             
+                $seconds = $durationInSeconds % 60;
                 UploadedVideos::find($result->id)->update([
                     'video_duration' => json_encode([
                         'minute' => $mins,
                         'hours' => $hours,
+                        'seconds' => $seconds
                     ]),
                 ]);
 

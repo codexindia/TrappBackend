@@ -75,10 +75,7 @@ class VideosManager extends Controller
         UploadedVideos::find($request->video_id)->increment('views', 1);
         $data->creator->makeHidden(['email', 'created_at', 'updated_at', 'contact_address', 'first_name', 'last_name', 'phone_number']);
         
-        $media = FFMpeg::open('//public/' . $data->getRawOriginal('video_loc'));
-        $durationInSeconds = $media->getDurationInSeconds(); // returns an int
-
-        $data['duration'] = CarbonInterval::seconds($durationInSeconds)->cascade()->forHumans()  ?? '';
+       
         $data['like'] = 0;
         $data['dislike'] = 0;
         $data['followed'] = 0;

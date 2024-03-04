@@ -40,7 +40,10 @@ class VideosManager extends Controller
     }
     public function get_play_list(Request $request)
     {
-        $data = Playlist::where('creator_id', $request->user()->id)
+        $request->validate([
+            'creator_id' => 'required'
+        ]);
+        $data = Playlist::where('creator_id', $request->creator_id)
             ->withCount('Videos')
             ->orderBy('id', 'desc')->get();
 

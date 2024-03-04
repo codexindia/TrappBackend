@@ -3,6 +3,7 @@
 use Carbon\CarbonInterval;
 use FFMpeg\Filters\Video\VideoFilters;
 use FFMpeg\Format\Audio\Aac;
+use FFMpeg\Format\Video\X264;
 use Illuminate\Support\Facades\Route;
 use ProtoneMedia\LaravelFFMpeg\Filters\WatermarkFactory;
 use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
@@ -22,8 +23,15 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('/get', function () {
-    $media = FFMpeg::open('demo.mkv');
-    $durationInSeconds = $media->getDurationInSeconds(); // returns an int
-    return CarbonInterval::seconds($durationInSeconds)->cascade()->forHumans()  ?? '';
+    $lowBitrate = (new X264)->setKiloBitrate(250);
+$midBitrate = (new X264)->setKiloBitrate(500);
+$highBitrate = (new X264)->setKiloBitrate(1000);
+    $media = FFMpeg::open('demo.mp4')
+    ->exportForHLS()
+   
+    ->addFormat($lowBitrate)
+   
+    ->save('adaptive_steve.m3u8');
+
      
 });

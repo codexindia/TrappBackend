@@ -35,6 +35,15 @@ class VideosManager extends Controller
             'message' => 'cat retreive'
         ]);
     }
+    public function get_play_list(Request $request)
+    {
+        $data = Playlist::where('creator_id',$request->user()->id)->orderBy('id', 'desc')->get();
+        return response()->json([
+            'status' => true,
+            'data' => $data,
+            'message' => 'cat retreive'
+        ]);
+    }
     public function get_vid_by_cat(Request $request)
     {
         $request->validate([

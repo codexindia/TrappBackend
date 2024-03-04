@@ -46,6 +46,7 @@ Route::middleware(['auth:sanctum','user.check'])->group(function () {
     Route::controller('VideosManager')->prefix('video')->group(function () {
         Route::post('/get_cat_list', 'get_cat_list');
         Route::post('/get_vid_by_cat', 'get_vid_by_cat');
+        Route::post('/get_play_list', 'get_play_list');
         Route::post('/get_vid_by_playlist', 'get_vid_by_playlist');
         Route::post('/like', 'like');
         Route::post('/get_v_details', 'get_v_details');

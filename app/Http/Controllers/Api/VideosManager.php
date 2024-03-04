@@ -9,10 +9,23 @@ use Http\Discovery\Psr18Client;
 use Illuminate\Http\Request;
 use App\Models\UploadedVideos;
 use App\Models\VideoAnalytics;
+use App\Models\Playlist;
 use Illuminate\Support\Facades\Log;
 
 class VideosManager extends Controller
 {
+    public function get_vid_by_playlist(Request $request)
+    {
+        $request->validate([
+            'playlist_id' => 'required|exists:playlists,id',
+        ]);
+        $data = UploadedVideos::where('playlist_id',$request->playlist_id)->orderBy('id', 'desc')->paginate(10);
+        return response()->json([
+            'status' => true,
+            'data' => $data,
+            'message' => 'video retrieive'
+        ]);
+    }
     public function get_cat_list()
     {
         $data = Category::orderBy('id', 'desc')->get();

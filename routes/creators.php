@@ -27,4 +27,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/messages','sendMessage');
         Route::post('/fetch','fetch');
       });
+      Route::controller('Playlist')->prefix('playlist')->group(function () {
+        Route::post('create', 'store');
+        Route::post('delete', 'destroy');
+        Route::post('fetch', 'index');
+    });
 });

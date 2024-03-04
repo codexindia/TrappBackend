@@ -50,4 +50,5 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('delete', 'deleteCoinBundle');
         Route::post('fetch', 'listCoinBundle');
     });
+   
 });

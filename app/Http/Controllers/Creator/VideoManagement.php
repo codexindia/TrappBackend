@@ -32,7 +32,7 @@ class VideoManagement extends Controller
             'message' => 'cat retreive'
         ]);
     }
-
+   
     public function delete(Request $request)
     {
         $request->validate([
@@ -57,6 +57,9 @@ class VideoManagement extends Controller
         }
         if ($request->has('description')) {
             $update_values['description'] = $request->description;
+        }
+        if ($request->has('playlist_id')) {
+            $update_values['playlist_id'] = $request->playlist_id;
         }
         if ($request->has('thumbnail')) {
             $thumbnail = Storage::put('public/videos/thumbnail', $request->file('thumbnail'));
@@ -130,7 +133,9 @@ class VideoManagement extends Controller
                 if ($request->has('cat_id')) {
                     $update_values['cat_id'] = $request->cat_id;
                 }
-
+                if ($request->has('playlist_id')) {
+                    $update_values['playlist_id'] = $request->playlist_id;
+                }
                 $proof_src = 'videos/' . $chunk->createFileName();
                 $update_values['video_loc'] = $proof_src;
                 //upload complete record

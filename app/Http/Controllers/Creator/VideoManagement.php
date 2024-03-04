@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Creator;
 
 use App\Http\Controllers\Controller;
 use App\Models\VideoAnalytics;
+use Carbon\CarbonInterval;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
+use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
 use Wester\ChunkUpload\Chunk;
 use Wester\ChunkUpload\Validation\Exceptions\ValidationException;
 use App\Models\UploadedVideos;
@@ -139,9 +141,14 @@ class VideoManagement extends Controller
                 $proof_src = 'videos/' . $chunk->createFileName();
                 $update_values['video_loc'] = $proof_src;
                 //upload complete record
-                UploadedVideos::create($update_values);
+                $result = UploadedVideos::create($update_values);
 
-
+                $media = FFMpeg::open('//public/' . $result->getRawOriginal('video_loc'));
+                $durationInSeconds = $media->getDurationInSeconds(); // returns an int
+                $duration = CarbonInterval::seconds($durationInSeconds)->cascade()->forHumans()  ?? '';
+                UploadedVideos::find($result->id)->update([
+                    'video_duration' => $duration
+                ]);
 
                 return response()->json([
                     'status' => true,

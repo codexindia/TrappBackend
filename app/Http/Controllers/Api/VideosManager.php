@@ -78,7 +78,7 @@ class VideosManager extends Controller
            return response()->json([
             'status' => false,
             'message' => 'Video File Moved or Deleted'
-           ])
+           ]);
         }
         $media = FFMpeg::open('//public/' . $data->getRawOriginal('video_loc'));
         $durationInSeconds = $media->getDurationInSeconds(); // returns an int

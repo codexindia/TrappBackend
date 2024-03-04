@@ -74,12 +74,7 @@ class VideosManager extends Controller
         $data = UploadedVideos::with('Creator:id,channel_name,channel_logo,first_name,last_name')->where('id', $video_id)->first();
         UploadedVideos::find($request->video_id)->increment('views', 1);
         $data->creator->makeHidden(['email', 'created_at', 'updated_at', 'contact_address', 'first_name', 'last_name', 'phone_number']);
-        if (!Storage::exists($data->getRawOriginal('video_loc'))) {
-           return response()->json([
-            'status' => false,
-            'message' => 'Video File Moved or Deleted'
-           ]);
-        }
+        
         $media = FFMpeg::open('//public/' . $data->getRawOriginal('video_loc'));
         $durationInSeconds = $media->getDurationInSeconds(); // returns an int
 

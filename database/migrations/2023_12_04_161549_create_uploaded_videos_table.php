@@ -23,7 +23,7 @@ return new class extends Migration
             $table->integer('views')->default(0);
             $table->integer('cat_id')->nullable();
             $table->integer('playlist_id')->nullable();
-            $table->string('video_duration')->nullable();
+            $table->json('video_duration')->nullable();
             $table->json('live_api_data')->nullable();
             $table->timestamps();
         });

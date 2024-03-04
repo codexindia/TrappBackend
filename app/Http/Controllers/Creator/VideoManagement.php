@@ -34,7 +34,7 @@ class VideoManagement extends Controller
             'message' => 'cat retreive'
         ]);
     }
-   
+
     public function delete(Request $request)
     {
         $request->validate([
@@ -145,9 +145,14 @@ class VideoManagement extends Controller
 
                 $media = FFMpeg::open('//public/' . $result->getRawOriginal('video_loc'));
                 $durationInSeconds = $media->getDurationInSeconds(); // returns an int
-                $duration = CarbonInterval::seconds($durationInSeconds)->cascade()->forHumans()  ?? '';
+                $hours = floor($durationInSeconds / 3600);
+                $mins = floor(($durationInSeconds - ($hours * 3600)) / 60);
+             
                 UploadedVideos::find($result->id)->update([
-                    'video_duration' => $duration
+                    'video_duration' => json_encode([
+                        'minute' => $mins,
+                        'hours' => $hours,
+                    ]),
                 ]);
 
                 return response()->json([

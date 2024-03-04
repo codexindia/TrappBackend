@@ -6,6 +6,7 @@ use ApiVideo\Client\Client;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Carbon\CarbonInterval;
+use Illuminate\Support\Facades\Storage;
 use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
 use Http\Discovery\Psr18Client;
 use Illuminate\Http\Request;
@@ -68,14 +69,20 @@ class VideosManager extends Controller
         $request->validate([
             'video_id' => 'required|exists:uploaded_videos,id'
         ]);
-     
+
         $video_id = $request->video_id;
         $data = UploadedVideos::with('Creator:id,channel_name,channel_logo,first_name,last_name')->where('id', $video_id)->first();
         UploadedVideos::find($request->video_id)->increment('views', 1);
         $data->creator->makeHidden(['email', 'created_at', 'updated_at', 'contact_address', 'first_name', 'last_name', 'phone_number']);
-        $media = FFMpeg::open('//public/'.$data->getRawOriginal('video_loc'));
+        if (!Storage::exists($data->getRawOriginal('video_loc'))) {
+           return response()->json([
+            'status' => false,
+            'message' => 'Video File Moved or Deleted'
+           ])
+        }
+        $media = FFMpeg::open('//public/' . $data->getRawOriginal('video_loc'));
         $durationInSeconds = $media->getDurationInSeconds(); // returns an int
-        
+
         $data['duration'] = CarbonInterval::seconds($durationInSeconds)->cascade()->forHumans()  ?? '';
         $data['like'] = 0;
         $data['dislike'] = 0;
@@ -118,6 +125,7 @@ class VideosManager extends Controller
             'status' => true,
             'data' => $data
         ]);
+        
     }
     public function like(Request $request)
     {

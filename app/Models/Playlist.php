@@ -18,4 +18,8 @@ class Playlist extends Model
         }
         return null;
     }
+    public function Videos()
+    {
+        return $this->hasMany(UploadedVideos::class, 'playlist_id', 'id');
+    }
 }

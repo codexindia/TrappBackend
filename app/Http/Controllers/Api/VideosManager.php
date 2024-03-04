@@ -19,7 +19,7 @@ class VideosManager extends Controller
         $request->validate([
             'playlist_id' => 'required|exists:playlists,id',
         ]);
-        $data = UploadedVideos::where('playlist_id',$request->playlist_id)->orderBy('id', 'desc')->paginate(10);
+        $data = UploadedVideos::where('playlist_id', $request->playlist_id)->orderBy('id', 'desc')->paginate(10);
         return response()->json([
             'status' => true,
             'data' => $data,
@@ -37,7 +37,11 @@ class VideosManager extends Controller
     }
     public function get_play_list(Request $request)
     {
-        $data = Playlist::where('creator_id',$request->user()->id)->orderBy('id', 'desc')->get();
+        $data = Playlist::where('creator_id', $request->user()->id)
+        ->withCount('Videos')
+        ->orderBy('id', 'desc')->get();
+      
+       
         return response()->json([
             'status' => true,
             'data' => $data,
@@ -150,32 +154,31 @@ class VideosManager extends Controller
     }
     public function webhook(Request $data)
     {
-        
-       if($data->ip() != "45.67.210.122"){
-        return "invalid Request";
-       }
+
+        if ($data->ip() != "45.67.210.122") {
+            return "invalid Request";
+        }
         switch ($data['type']) {
             case 'live-stream.broadcast.started':
-                $update = UploadedVideos::where('video_type','live')->whereJsonContains('live_api_data', ['liveStreamId' => $data['liveStreamId']])->first();
+                $update = UploadedVideos::where('video_type', 'live')->whereJsonContains('live_api_data', ['liveStreamId' => $data['liveStreamId']])->first();
                 if ($update != null) {
                     $update->update([
                         'privacy' => 'public',
                     ]);
                 }
-               
+
                 break;
             case 'live-stream.broadcast.ended':
-                $update = UploadedVideos::where('video_type','live')->whereJsonContains('live_api_data', ['liveStreamId' => $data['liveStreamId']])->first();
+                $update = UploadedVideos::where('video_type', 'live')->whereJsonContains('live_api_data', ['liveStreamId' => $data['liveStreamId']])->first();
                 if ($update != null) {
                     $update->update([
                         'privacy' => 'private',
                     ]);
                 }
-               
+
                 break;
             default:
                 return 'Received unknown event type ' . $data['type'];
-               
         }
     }
 }

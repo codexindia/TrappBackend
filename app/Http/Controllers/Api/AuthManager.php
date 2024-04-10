@@ -64,7 +64,7 @@ class AuthManager extends Controller
         $request->validate([
             'country_code' => 'required|numeric',
             'otp' => 'required|numeric|digits:6',
-            'phone' => 'required|numeric|exists:users,phone|digits:13',
+            'phone' => 'required|numeric|exists:users,phone|max:13',
         ]);
         //  return  $this->VerifyOTP($request->phone, $request->otp);
         if ($this->VerifyOTP($request->phone, $request->otp)) {
@@ -119,7 +119,7 @@ class AuthManager extends Controller
     {
         $request->validate([
             'country_code' => 'required|numeric',
-            'phone' => 'required|numeric|exists:users,phone|digits:13',
+            'phone' => 'required|numeric|exists:users,phone|max:13',
         ], [
             'phone.exists' => 'Phone Number Has Not Registered',
         ]);
@@ -139,7 +139,7 @@ class AuthManager extends Controller
     public function resend(Request $request)
     {
         $request->validate([
-            'phone' => 'required|numeric|digits:13',
+            'phone' => 'required|numeric|max:13',
         ]);
         $phone = $request->phone;
 

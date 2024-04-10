@@ -47,7 +47,7 @@ class AuthManager extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'phone' => 'required|numeric|unique:users,phone',
+            'phone' => 'required|numeric|unique:users,phone|max_digits:13',
             'country_code' => 'required|numeric'
         ]);
         $temp = ['name' => $request->name, 'country_code' => $request->country_code];

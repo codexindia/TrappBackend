@@ -27,13 +27,13 @@ class StripeController extends Controller
             'success_url' => $this->redirect_url . '/' . $order_id,
             'line_items' => [
                 [
-                    'price' => 'price_1Odd84EWrX6kyCsNluSkvWKA',
+                    'price' => 'price_1PLe58EWrX6kyCsN7Q0u1Y6I',
                     'quantity' => 1,
                 ],
             ],
             'mode' => 'subscription',
         ]);
-        $price = $this->stripe->prices->retrieve('price_1Odd84EWrX6kyCsNluSkvWKA', []);
+        $price = $this->stripe->prices->retrieve('price_1PLe58EWrX6kyCsN7Q0u1Y6I', []);
         $createOrder = new UserOrders();
         $createOrder->user_id = $request->user()->id;
         $createOrder->session_id = $payment_init->id;

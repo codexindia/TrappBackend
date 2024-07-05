@@ -17,7 +17,7 @@ class Kernel extends HttpKernel
         
         // \App\Http\Middleware\TrustHosts::class,
 
-        \App\Http\Middleware\CorsMiddleware::class,
+      
         \App\Http\Middleware\TrustProxies::class,
         \Illuminate\Http\Middleware\HandleCors::class,
         \App\Http\Middleware\PreventRequestsDuringMaintenance::class,
@@ -57,6 +57,7 @@ class Kernel extends HttpKernel
      * @var array<string, class-string|string>
      */
     protected $middlewareAliases = [
+        'cors' => \Illuminate\Http\Middleware\HandleCors::class,
         'user.check' => \App\Http\Middleware\CheckBan::class,
         'auth' => \App\Http\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,

@@ -14,6 +14,12 @@ Route::middleware('auth:sanctum')->group(function () {
     });
     Route::controller('VideoManagement')->prefix('video')->group(function () {
         Route::post('upload', 'upload')->middleware('cors');
+        Route::options('upload', function() {
+            return response('', 200)
+                ->header('Access-Control-Allow-Origin', 'https://trapp-creator-panel.vercel.app')
+                ->header('Access-Control-Allow-Methods', 'POST, OPTIONS')
+                ->header('Access-Control-Allow-Headers', 'Content-Type, X-Auth-Token, Origin, Authorization');
+        });
         Route::post('get_cat_list', 'get_cat_list');
         Route::post('video_list', 'video_list');
         Route::post('delete', 'delete');

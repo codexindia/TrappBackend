@@ -162,7 +162,7 @@ class VideoManagement extends Controller
                     'url' => url($proof_src),
                 ]);
             } else {
-                $chunk->response()->json([
+                $chunk->response(200)->json([
                     'progress' => $chunk->getProgress()
                 ]);
             }

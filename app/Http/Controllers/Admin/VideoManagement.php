@@ -7,15 +7,36 @@ use App\Models\VideoAnalytics;
 use Illuminate\Http\Request;
 use App\Models\UploadedVideos;
 use App\Models\Category;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class VideoManagement extends Controller
 {
     public function video_list(Request $request)
     {
-        $data = UploadedVideos::with('Creator:id,channel_name')
-            ->orderBy("id", "desc")
+
+        $data = UploadedVideos::select(
+            'uploaded_videos.*',
+            DB::raw('COALESCE(va.like_count, 0) as like_count'),
+            DB::raw('COALESCE(va.dislike_count, 0) as dislike_count')
+        )->with('Creator:id,channel_name')
+        ->orderBy("id", "desc")
+            ->leftJoinSub(
+                VideoAnalytics::select(
+                    DB::raw('CAST(JSON_UNQUOTE(JSON_EXTRACT(attribute, "$.video_id")) AS UNSIGNED) AS video_id'),
+                    DB::raw('SUM(CASE WHEN action = "like" THEN 1 ELSE 0 END) AS like_count'),
+                    DB::raw('SUM(CASE WHEN action = "dislike" THEN 1 ELSE 0 END) AS dislike_count')
+                )
+                    ->whereNotNull('attribute')
+                    ->whereIn('action', ['like', 'dislike'])
+                    ->groupBy(DB::raw('CAST(JSON_UNQUOTE(JSON_EXTRACT(attribute, "$.video_id")) AS UNSIGNED)')),
+                'va',
+                'uploaded_videos.id',
+                '=',
+                'va.video_id'
+            )
             ->paginate(10);
+      
         // $data['dislike_count'] = 0;
         // $data['like_count'] = 0;
         // $query = VideoAnalytics::where([

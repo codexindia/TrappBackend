@@ -104,7 +104,7 @@ class VideoManagement extends Controller
                 '=',
                 'va.video_id'
             )
-            ->paginate(15);
+            ->paginate(10);
         if ($row) {
             return response()->json([
                 'status' => true,

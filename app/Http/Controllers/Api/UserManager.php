@@ -44,13 +44,14 @@ class UserManager extends Controller
 
         $request->validate([
             'name' => 'required',
-            'email' => 'email|unique:users,email',
+            'email' => 'email',
             'profile_pic' => 'image|mimes:jpg,png,jpeg,gif,svg|max:2048',
         ], [
             'name.required' => 'Please Enter Your name',
             'email.email' => 'Please Enter Valid Email',
             'profile_pic.image' => 'Upload your Valid profile picture'
         ]);
+       
         $updated_filed = array(
             'name' => $request->name,
         );

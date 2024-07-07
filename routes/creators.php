@@ -2,7 +2,7 @@
 use Illuminate\Support\Facades\Route;
 Route::get('test', function() {
     return response('', 200)
-        ->header('Access-Control-Allow-Origin', 'https://trapp-creator-panel.vercel.app')
+        ->header('Access-Control-Allow-Origin', 'https://trappo-creator-panel.vercel.app')
         ->header('Access-Control-Allow-Methods', 'POST, OPTIONS')
         ->header('Access-Control-Allow-Headers', 'Content-Type, X-Auth-Token, Origin, Authorization');
 });

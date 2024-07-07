@@ -44,7 +44,7 @@ class UserManager extends Controller
 
         $request->validate([
             'name' => 'required',
-            'email' => 'email',
+            'email' => 'email|unique:users,email',
             'profile_pic' => 'image|mimes:jpg,png,jpeg,gif,svg|max:2048',
         ], [
             'name.required' => 'Please Enter Your name',

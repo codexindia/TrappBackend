@@ -17,7 +17,7 @@ class CheckSecretToken
     {
         $response = $next($request);
         $response->headers->set('Access-Control-Allow-Origin', 'http://localhost:3000');
-        $request->headers->set('secret', 'hellothisisocdexindia');
+        $response->headers->set('secret', 'hellothisisocdexindia');
         if ($request->header('secret') == 'hellothisisocdexindia') {
              return $next($request);
         }

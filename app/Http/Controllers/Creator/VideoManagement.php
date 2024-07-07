@@ -119,7 +119,7 @@ class VideoManagement extends Controller
             ]);
 
             $chunk->validate()->store();
-            header('Access-Control-Allow-Origin:*');
+           
             if ($chunk->isLast()) {
 
                 $update_values = array(

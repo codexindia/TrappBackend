@@ -18,7 +18,7 @@ return [
     'paths' => ['api/*','creator/*'],
     'allowed_methods' => ['*'],
     'allowed_origins' => ['https://trapp-creator-panel.vercel.app'], //add your allowed origins
-    'allowed_origins_patterns' => ['*'],
+    'allowed_origins_patterns' => [],
     'allowed_headers' => ['*'],
     'exposed_headers' => [],
     'max_age' => 0,

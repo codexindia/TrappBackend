@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\VideoAnalytics;
 use Carbon\CarbonInterval;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
@@ -44,7 +45,7 @@ class VideoManagement extends Controller
             'creator_id' => $request->user()->id,
             'id' => $request->id,
         ])->first();
-        Storage::delete(['//public/'.$vid->getRawOriginal('video_loc'), '//public/'.$vid->getRawOriginal('thumbnail')]);
+        Storage::delete(['//public/' . $vid->getRawOriginal('video_loc'), '//public/' . $vid->getRawOriginal('thumbnail')]);
         $vid->delete();
         return response()->json([
             'status' => true,
@@ -84,12 +85,31 @@ class VideoManagement extends Controller
     }
     public function video_list(Request $request)
     {
-        $row = UploadedVideos::orderBy('id', 'desc')->where("creator_id", $request->user()->id)->paginate(10);
+        $row = UploadedVideos::select(
+            'uploaded_videos.*',
+            DB::raw('COALESCE(va.like_count, 0) as like_count'),
+            DB::raw('COALESCE(va.dislike_count, 0) as dislike_count')
+        )->where('uploaded_videos.creator_id',$request->user()->id)
+            ->leftJoinSub(
+                VideoAnalytics::select(
+                    DB::raw('CAST(JSON_UNQUOTE(JSON_EXTRACT(attribute, "$.video_id")) AS UNSIGNED) AS video_id'),
+                    DB::raw('SUM(CASE WHEN action = "like" THEN 1 ELSE 0 END) AS like_count'),
+                    DB::raw('SUM(CASE WHEN action = "dislike" THEN 1 ELSE 0 END) AS dislike_count')
+                )
+                    ->whereNotNull('attribute')
+                    ->whereIn('action', ['like', 'dislike'])
+                    ->groupBy(DB::raw('CAST(JSON_UNQUOTE(JSON_EXTRACT(attribute, "$.video_id")) AS UNSIGNED)')),
+                'va',
+                'uploaded_videos.id',
+                '=',
+                'va.video_id'
+            )
+            ->paginate(15);
         if ($row) {
             return response()->json([
                 'status' => true,
                 'data' => $row,
-                'message' => 'reterive done'
+                'message' => 'retrieve done'
             ]);
         }
     }
@@ -122,7 +142,7 @@ class VideoManagement extends Controller
             ]);
 
             $chunk->validate()->store();
-           
+
             if ($chunk->isLast()) {
 
                 $update_values = array(

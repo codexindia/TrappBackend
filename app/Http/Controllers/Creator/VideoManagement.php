@@ -89,7 +89,7 @@ class VideoManagement extends Controller
             'uploaded_videos.*',
             DB::raw('COALESCE(va.like_count, 0) as like_count'),
             DB::raw('COALESCE(va.dislike_count, 0) as dislike_count')
-        )->where('uploaded_videos.creator_id',$request->user()->id)
+        )->where('uploaded_videos.creator_id',$request->user()->id)->orderBy('id','desc')
             ->leftJoinSub(
                 VideoAnalytics::select(
                     DB::raw('CAST(JSON_UNQUOTE(JSON_EXTRACT(attribute, "$.video_id")) AS UNSIGNED) AS video_id'),

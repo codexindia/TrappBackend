@@ -5,7 +5,7 @@ Route::get('test', function() {
         ->header('Access-Control-Allow-Origin', 'https://trapp-creator-panel.vercel.app')
         ->header('Access-Control-Allow-Methods', 'POST, OPTIONS')
         ->header('Access-Control-Allow-Headers', 'Content-Type, X-Auth-Token, Origin, Authorization');
-})->middleware('cors');
+});
 Route::controller('AuthManager')->middleware('throttle:api')->prefix('auth')->group(function () {
     Route::post('login', 'login_submit');
     Route::post('forget_pass', 'forget_pass');

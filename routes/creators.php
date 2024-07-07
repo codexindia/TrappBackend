@@ -19,7 +19,7 @@ Route::middleware('auth:sanctum')->group(function () {
                 ->header('Access-Control-Allow-Origin', 'https://trapp-creator-panel.vercel.app')
                 ->header('Access-Control-Allow-Methods', 'POST, OPTIONS')
                 ->header('Access-Control-Allow-Headers', 'Content-Type, X-Auth-Token, Origin, Authorization');
-        });
+        })->middleware('cors');
         Route::post('get_cat_list', 'get_cat_list');
         Route::post('video_list', 'video_list');
         Route::post('delete', 'delete');

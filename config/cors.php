@@ -17,7 +17,7 @@ return [
 
     'paths' => ['api/*','creator/*'],
     'allowed_methods' => ['*'],
-    'allowed_origins' => ['*'], //add your allowed origins
+    //'allowed_origins' => ['*'], //add your allowed origins
     'allowed_origins_patterns' => [],
     'allowed_headers' => ['*'],
     'exposed_headers' => [],

@@ -60,6 +60,17 @@ class UserManager extends Controller
             $updated_filed['profile_pic'] = $image_path;
         }
         if ($request->has('email')) {
+            $check = User::where([
+                'email'=>$request->email,
+                
+                ])->whereNot('id',$request->user()->id)->first();
+            if($check != null)
+            {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Email is already Associated With Another Account',
+                ]);
+            }
             $updated_filed['email'] = $request->email;
         }
         $user = User::find($request->user()->id);

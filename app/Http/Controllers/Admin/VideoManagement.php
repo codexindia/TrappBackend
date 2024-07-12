@@ -120,7 +120,7 @@ class VideoManagement extends Controller
     {
          $cat = Category::find($request->cat_id);
          UploadedVideos::where([
-            'cat' => $request->cat_id,
+            'cat_id' => $request->cat_id,
         ])->update([
             'cat_id' => NULL
         ]);

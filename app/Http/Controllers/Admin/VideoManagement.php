@@ -122,7 +122,7 @@ class VideoManagement extends Controller
          UploadedVideos::where([
             'cat' => $request->cat_id,
         ])->update([
-            'cat_id' => null
+            'cat_id' => NULL
         ]);
         Storage::delete($cat->image);
         $cat->delete();

@@ -119,6 +119,11 @@ class VideoManagement extends Controller
     public function cat_delete(Request $request)
     {
          $cat = Category::find($request->cat_id);
+         UploadedVideos::where([
+            'cat' => $request->cat_id,
+        ])->update([
+            'cat_id' => null
+        ]);
         Storage::delete($cat->image);
         $cat->delete();
         return response()->json([

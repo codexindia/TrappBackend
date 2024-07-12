@@ -40,6 +40,7 @@ class ChatsController extends Controller
                 'message' => "You Don't Have Enough Coins",
             ]); 
         }
+        
         $result = Message::create($message);
         
         event(new \App\Events\MessageSent($result));

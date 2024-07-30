@@ -7,7 +7,7 @@ use FFMpeg\Format\Video\X264;
 use Illuminate\Support\Facades\Route;
 use ProtoneMedia\LaravelFFMpeg\Filters\WatermarkFactory;
 use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
-
+use Illuminate\Support\Facades\Storage;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -23,15 +23,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('/get', function () {
-    $lowBitrate = (new X264)->setKiloBitrate(250);
-$midBitrate = (new X264)->setKiloBitrate(500);
-$highBitrate = (new X264)->setKiloBitrate(1000);
-    $media = FFMpeg::open('demo.mp4')
-    ->exportForHLS()
-   
-    ->addFormat($lowBitrate)
-   
-    ->save('adaptive_steve.m3u8');
+    Storage::disk('digitalocean')->append('dfg/filename.txt', 'asas');
+//return  Storage::disk('digitalocean')->rename('dfg/filename.txt');
 
      
 });

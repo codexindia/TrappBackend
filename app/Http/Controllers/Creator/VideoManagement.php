@@ -129,8 +129,8 @@ class VideoManagement extends Controller
 
                 // Local driver details
                 'local_driver' => [
-                    'path' => public_path('/storage/videos/'), // where to upload the final file
-                    'tmp_path' => public_path('/storage/videos/temp/'), // where to store the temp chunks
+                    'path' => 'videos/', // where to upload the final file
+                    'tmp_path' => 'videos/temp/', // where to store the temp chunks
                 ],
 
                 // File details

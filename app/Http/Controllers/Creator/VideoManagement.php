@@ -144,7 +144,11 @@ class VideoManagement extends Controller
             $chunk->validate()->store();
 
             if ($chunk->isLast()) {
-
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Video Upload Success',
+                    //'url' => url($proof_src),
+                ]);
                 $update_values = array(
                     'title' => $request->title,
                     'description' => $request->description,

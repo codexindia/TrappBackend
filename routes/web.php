@@ -22,9 +22,25 @@ use Illuminate\Support\Facades\Storage;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('/get', function () {
-    Storage::disk('digitalocean')->append('dfg/filename.txt', 'asas');
-//return  Storage::disk('digitalocean')->rename('dfg/filename.txt');
+// Route::get('/get', function () {
+//     return Storage::disk('digitalocean')->get('Y2meta.app-Bem-vindos ao meu mundo_ O início da jornada no canal do Léo Silva-(720p).mp4');
+//    // Storage::disk('digitalocean')->put('filename.txt', 'asas');
+//     return  Storage::disk('digitalocean')->append('big_buck_bunny_720p_2mb.mp4',file_get_contents(Storage::disk('digitalocean')->get('Y2meta.app-Bem-vindos ao meu mundo_ O início da jornada no canal do Léo Silva-(720p).mp4')));
+//     function renameFile($oldPath, $newPath)
+//     {
+//         $disk = Storage::disk('digitalocean'); // Assuming 'spaces' is your configured disk name
 
-     
-});
+//         if ($disk->exists($oldPath)) {
+//             // Copy the file to the new path
+//            return $disk->append($oldPath, $newPath);
+
+//             // Delete the old file
+//             $disk->delete($oldPath);
+
+//             return true;
+//         }
+
+//         return false;
+//     }
+//    return dd(renameFile('filename.txt','abcd.txt'));
+// });

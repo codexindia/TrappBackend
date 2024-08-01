@@ -45,7 +45,7 @@ class VideoManagement extends Controller
             'creator_id' => $request->user()->id,
             'id' => $request->id,
         ])->first();
-        Storage::disk('digitalocean')->delete(['//public/' . $vid->getRawOriginal('video_loc'), '//public/' . $vid->getRawOriginal('thumbnail')]);
+        Storage::disk('digitalocean')->delete(['//public/' . $vid->getRawOriginal('video_loc'), $vid->getRawOriginal('thumbnail')]);
         $vid->delete();
         return response()->json([
             'status' => true,

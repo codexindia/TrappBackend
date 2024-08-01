@@ -89,7 +89,7 @@ class VideoManagement extends Controller
             'uploaded_videos.*',
             DB::raw('COALESCE(va.like_count, 0) as like_count'),
             DB::raw('COALESCE(va.dislike_count, 0) as dislike_count')
-        )->where('uploaded_videos.creator_id',$request->user()->id)->orderBy('id','desc')
+        )->where('uploaded_videos.creator_id', $request->user()->id)->orderBy('id', 'desc')
             ->leftJoinSub(
                 VideoAnalytics::select(
                     DB::raw('CAST(JSON_UNQUOTE(JSON_EXTRACT(attribute, "$.video_id")) AS UNSIGNED) AS video_id'),
@@ -176,21 +176,20 @@ class VideoManagement extends Controller
                 $hours = floor($durationInSeconds / 3600);
                 $mins = floor(($durationInSeconds - ($hours * 3600)) / 60);
                 $seconds = $durationInSeconds % 60;
-              UploadedVideos::find($result->id)->update([
+                UploadedVideos::find($result->id)->update([
                     'video_duration' => json_encode([
                         'minute' => $mins,
                         'hours' => $hours,
                         'seconds' => $seconds
                     ]),
                 ]);
-              try{
-                if (Storage::disk('local')->exists($update_values['video_loc'])) {
-                Storage::disk('digitalocean')->put($fileName,Storage::get($update_values['video_loc']));
-            
-            }
-        }catch(\Exception $e){
-               dd($e->getMessage());
-              }
+                try {
+                    if (Storage::disk('local')->exists($update_values['video_loc'])) {
+                        Storage::disk('digitalocean')->put($fileName, Storage::get($update_values['video_loc']));
+                    }
+                } catch (\Exception $e) {
+                    dd($e->getMessage());
+                }
                 return response()->json([
                     'status' => true,
                     'message' => 'Video Upload Success',

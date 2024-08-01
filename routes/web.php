@@ -22,6 +22,10 @@ use Illuminate\Support\Facades\Storage;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/vid', function () {
+    Storage::get('public/videos/thumbnail/RMu17HKIPZBdyCBTOVRgISrsu7p9zqVPNRZ8yd4F.png');
+});
+
 // Route::get('/get', function () {
 //     return Storage::disk('digitalocean')->get('Y2meta.app-Bem-vindos ao meu mundo_ O início da jornada no canal do Léo Silva-(720p).mp4');
 //    // Storage::disk('digitalocean')->put('filename.txt', 'asas');

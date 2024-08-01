@@ -56,7 +56,7 @@ class UserManager extends Controller
             'name' => $request->name,
         );
         if ($request->hasFile('profile_pic')) {
-            $image_path = Storage::put('public/users/profiles', $request->file('profile_pic'));
+            $image_path = Storage::disk('digitalocean')->put('public/users/profiles', $request->file('profile_pic'));
             $updated_filed['profile_pic'] = $image_path;
         }
         if ($request->has('email')) {

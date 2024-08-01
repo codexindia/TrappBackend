@@ -45,7 +45,7 @@ class VideoManagement extends Controller
             'creator_id' => $request->user()->id,
             'id' => $request->id,
         ])->first();
-        Storage::delete(['//public/' . $vid->getRawOriginal('video_loc'), '//public/' . $vid->getRawOriginal('thumbnail')]);
+        Storage::disk('digitalocean')->delete(['//public/' . $vid->getRawOriginal('video_loc'), '//public/' . $vid->getRawOriginal('thumbnail')]);
         $vid->delete();
         return response()->json([
             'status' => true,
@@ -68,7 +68,7 @@ class VideoManagement extends Controller
             $update_values['playlist_id'] = $request->playlist_id;
         }
         if ($request->has('thumbnail')) {
-            $thumbnail = Storage::put('public/videos/thumbnail', $request->file('thumbnail'));
+            $thumbnail = Storage::disk('digitalocean')->put('public/videos/thumbnail', $request->file('thumbnail'));
             $update_values['thumbnail'] =  $thumbnail;
         }
         if ($request->has('privacy')) {
@@ -236,7 +236,7 @@ class VideoManagement extends Controller
 
                 );
                 if ($request->hasFile('thumbnail')) {
-                    $thumbnail = Storage::put('public/videos/thumbnail', $request->file('thumbnail'));
+                    $thumbnail = Storage::disk('digitalocean')->put('public/videos/thumbnail', $request->file('thumbnail'));
                     $update_values['thumbnail'] = $thumbnail;
                 }
                 if ($request->has('cat_id')) {

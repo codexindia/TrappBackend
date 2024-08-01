@@ -165,7 +165,8 @@ class VideoManagement extends Controller
                 if ($request->has('playlist_id')) {
                     $update_values['playlist_id'] = $request->playlist_id;
                 }
-                $proof_src = 'videos/' . $chunk->createFileName();
+                $fileName = $chunk->createFileName();
+                $proof_src = 'videos/' . $fileName;
                 $update_values['video_loc'] = $proof_src;
                 //upload complete record
                 $result = UploadedVideos::create($update_values);
@@ -175,14 +176,18 @@ class VideoManagement extends Controller
                 $hours = floor($durationInSeconds / 3600);
                 $mins = floor(($durationInSeconds - ($hours * 3600)) / 60);
                 $seconds = $durationInSeconds % 60;
-                UploadedVideos::find($result->id)->update([
+              UploadedVideos::find($result->id)->update([
                     'video_duration' => json_encode([
                         'minute' => $mins,
                         'hours' => $hours,
                         'seconds' => $seconds
                     ]),
                 ]);
+              try{
+                Storage::disk('digitalocean')->put($fileName,Storage::get($update_values['video_loc']));
+              }catch(\Exception $e){
 
+              }
                 return response()->json([
                     'status' => true,
                     'message' => 'Video Upload Success',

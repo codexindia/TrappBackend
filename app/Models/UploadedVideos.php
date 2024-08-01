@@ -14,7 +14,7 @@ class UploadedVideos extends Model
     {
         if(!$value == null)
         {
-            return asset(Storage::url($value));
+            return Storage::disk('digitalocean')->url($value);
         }
         return null;
     }

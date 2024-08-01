@@ -16,7 +16,7 @@ class Creator extends Authenticatable
     {
         if(!$value == null)
         {
-            return asset(Storage::url($value));
+            return Storage::disk('digitalocean')->url($value);
         }
         $arr = array(
             '0' => 'https://ui-avatars.com/api/?background=0D8ABC&name='
@@ -32,7 +32,7 @@ class Creator extends Authenticatable
     {
         if(!$value == null)
         {
-            return asset(Storage::url($value));
+            return Storage::disk('digitalocean')->url($value);
         }
         return null;
     }

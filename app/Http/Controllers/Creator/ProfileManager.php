@@ -37,11 +37,11 @@ class ProfileManager extends Controller
             $update_values['password'] = bcrypt($request->password);
         }
         if ($request->hasFile('channel_logo')) {
-            $image_path = Storage::put('public/creators/profiles', $request->file('channel_logo'));
+            $image_path = Storage::disk('digitalocean')->put('public/creators/profiles', $request->file('channel_logo'));
             $update_values['channel_logo'] = $image_path;
         }
         if ($request->hasFile('channel_banner')) {
-            $image_path = Storage::put('public/creators/profiles', $request->file('channel_banner'));
+            $image_path = Storage::disk('digitalocean')->put('public/creators/profiles', $request->file('channel_banner'));
             $update_values['channel_banner'] = $image_path;
         }
         $creator = Creator::find($request->user()->id);

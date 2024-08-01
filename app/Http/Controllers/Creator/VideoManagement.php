@@ -156,8 +156,9 @@ class VideoManagement extends Controller
                     'privacy' => $request->privacy,
                 );
                 if ($request->hasFile('thumbnail')) {
-                    $thumbnail = Storage::put('public/videos/thumbnail', $request->file('thumbnail'));
-                    $update_values['thumbnail'] = $thumbnail;
+                  //  $thumbnail = Storage::put('public/videos/thumbnail', $request->file('thumbnail'));
+                  $thumbnail = Storage::disk('digitalocean')->put('public/videos/thumbnail', $request->file('thumbnail'));  
+                  $update_values['thumbnail'] = $thumbnail;
                 }
                 if ($request->has('cat_id')) {
                     $update_values['cat_id'] = $request->cat_id;

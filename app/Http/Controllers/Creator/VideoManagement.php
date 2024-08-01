@@ -184,7 +184,7 @@ class VideoManagement extends Controller
                     ]),
                 ]);
                 try {
-                    if (Storage::disk('local')->exists($update_values['video_loc'])) {
+                    if (Storage::exists($update_values['video_loc'])) {
                         Storage::disk('digitalocean')->put($fileName, Storage::get($update_values['video_loc']));
                     }
                 } catch (\Exception $e) {

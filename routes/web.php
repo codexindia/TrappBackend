@@ -23,7 +23,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('/vid', function () {
-    Storage::get('public/videos/thumbnail/RMu17HKIPZBdyCBTOVRgISrsu7p9zqVPNRZ8yd4F.png');
+    return Storage::get('public/videos/thumbnail/RMu17HKIPZBdyCBTOVRgISrsu7p9zqVPNRZ8yd4F.png');
 });
 
 // Route::get('/get', function () {

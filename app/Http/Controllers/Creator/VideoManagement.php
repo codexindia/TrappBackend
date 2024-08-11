@@ -184,13 +184,13 @@ class VideoManagement extends Controller
                         'seconds' => $seconds
                     ]),
                 ]);
-                try {
-                    if (Storage::exists('//public/' .$update_values['video_loc'])) {
-                        Storage::disk('digitalocean')->put('//public/' .$update_values['video_loc'],Storage::get('//public/' .$update_values['video_loc']));
-                    }
-                } catch (\Exception $e) {
-                    //dd($e->getMessage());
-                }
+                // try {
+                //     if (Storage::exists('//public/' .$update_values['video_loc'])) {
+                //         Storage::disk('digitalocean')->put('//public/' .$update_values['video_loc'],Storage::get('//public/' .$update_values['video_loc']));
+                //     }
+                // } catch (\Exception $e) {
+                //     //dd($e->getMessage());
+                // }
                 return response()->json([
                     'status' => true,
                     'message' => 'Video Upload Success',

@@ -23,7 +23,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('/vid', function () {
-    dd(Storage::exists('//public/' .'videos/8ea469c6c2a239542438b86dd79c2303.mp4'));
+    dd(Storage::exists('//public/' . 'videos/8ea469c6c2a239542438b86dd79c2303.mp4'));
 });
 
 // Route::get('/get', function () {
@@ -48,3 +48,9 @@ Route::get('/vid', function () {
 //     }
 //    return dd(renameFile('filename.txt','abcd.txt'));
 // });
+Route::get('/privacy_policy', function () {
+    return view('privacyPolicy');
+});
+Route::get('/terms_and_condition', function () {
+    return view('termsCondition');
+});

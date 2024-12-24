@@ -17,7 +17,6 @@
         <li><strong>Personal Information:</strong> When you create an account and subscribe to our platform, we collect your name, email address, contact number, and payment details. Payment information (such as credit/debit card or PayPal details) is processed through our payment provider, Stripe.</li>
         <li><strong>Usage Data:</strong> We collect information on how you use the app, including videos you watch (martial arts-related content), comments made, live streams attended, and creators followed. A subscription is required to access videos and live streams.</li>
         <li><strong>Live Stream Interactions:</strong> We collect data when you participate in live streams by sending Trapp Coins, super stickers, chat messages, or other interactions.</li>
-        <li><strong>E-Commerce Information:</strong> When you purchase gym-related products through our app, we collect information regarding your orders, including product details and shipping information.</li>
         <li><strong>Report Data:</strong> When you report a video or live stream that violates our community guidelines, we collect details about the reported content and your comments regarding the violation.</li>
         <li><strong>Technical Data:</strong> This includes your device type, IP address, browser type, and operating system to optimize your experience on the platform.</li>
         <li><strong>Push Notifications:</strong> We use OneSignal to send push notifications about new content, live streams, and updates. If enabled, your device details will be collected to deliver notifications.</li>
@@ -30,8 +29,7 @@
         <li><strong>Payment Processing:</strong> To securely process subscription fees and purchases of Trapp Coins and gym-related products through Stripe.</li>
         <li><strong>Push Notifications:</strong> To send notifications via OneSignal about live streams, new martial arts videos, and other updates based on your preferences.</li>
         <li><strong>User Experience:</strong> To personalize your experience by suggesting videos or creators you might enjoy and improving the overall functionality of the app.</li>
-        <li><strong>E-Commerce Services:</strong> To manage your purchases of gym-related products, including order processing and delivery.</li>
-        <li><strong>Reporting Violations:</strong> We use the information provided in reports to investigate and take action on content that violates our community guidelines.</li>
+         <li><strong>Reporting Violations:</strong> We use the information provided in reports to investigate and take action on content that violates our community guidelines.</li>
         <li><strong>Communication:</strong> To send important updates related to your account, including notifications of new content and promotional messages (if you opt-in).</li>
         <li><strong>Security:</strong> To detect and prevent fraudulent or suspicious activity, unauthorized access, and violations of our terms of service.</li>
     </ul>
